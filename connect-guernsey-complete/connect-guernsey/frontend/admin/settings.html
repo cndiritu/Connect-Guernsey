@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Settings — Connect Guernsey Admin</title>
+<link rel="stylesheet" href="/admin/assets/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+  <div class="sidebar" id="sidebar"></div>
+  <div class="main-content">
+    <div class="top-bar"><div class="page-title">Site Settings</div></div>
+    <div class="page-body">
+      <div id="settingsAlert"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div class="card">
+          <div class="card-header"><span class="card-title">General Settings</span></div>
+          <div class="card-body">
+            <div class="form-group"><label>Site Name</label><input type="text" id="set_site_name"></div>
+            <div class="form-group"><label>Tagline</label><input type="text" id="set_site_tagline"></div>
+            <div class="form-group"><label>Contact Email</label><input type="email" id="set_site_email"></div>
+            <div class="form-group"><label>Launch Date (display text)</label><input type="text" id="set_launch_date" placeholder="e.g. May 2026"></div>
+            <button class="btn btn-gold" onclick="saveSettings()">Save Settings</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Social Media</span></div>
+          <div class="card-body">
+            <div class="form-group"><label>LinkedIn URL</label><input type="url" id="set_social_linkedin" placeholder="https://linkedin.com/company/..."></div>
+            <div class="form-group"><label>Facebook URL</label><input type="url" id="set_social_facebook" placeholder="https://facebook.com/..."></div>
+            <div class="form-group"><label>Instagram URL</label><input type="url" id="set_social_instagram" placeholder="https://instagram.com/..."></div>
+            <button class="btn btn-gold" onclick="saveSettings()">Save Social Links</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Admin Account</span></div>
+          <div class="card-body">
+            <div id="pwAlert"></div>
+            <div class="form-group"><label>Current Password</label><input type="password" id="curPw"></div>
+            <div class="form-group"><label>New Password</label><input type="password" id="newPw"></div>
+            <div class="form-group"><label>Confirm New Password</label><input type="password" id="confPw"></div>
+            <button class="btn btn-navy" onclick="changePassword()">Change Password</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Admin Users</span></div>
+          <div class="card-body">
+            <div id="adminsTable" style="margin-bottom:1rem"></div>
+            <div style="border-top:1px solid rgba(0,0,0,.06);padding-top:1rem;margin-top:.5rem">
+              <div style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:.75rem">Add Admin User</div>
+              <div id="addAdminAlert"></div>
+              <div class="form-group"><label>Name</label><input type="text" id="newAdminName"></div>
+              <div class="form-group"><label>Email</label><input type="email" id="newAdminEmail"></div>
+              <div class="form-group"><label>Temporary Password</label><input type="password" id="newAdminPw"></div>
+              <button class="btn btn-navy btn-sm" onclick="addAdmin()">Add Admin</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/admin/assets/admin.js"></script>
+<script>
+if(!requireAuth())throw '';
+buildSidebar('settings');
+const SETTINGS=['site_name','site_tagline','site_email','launch_date','social_linkedin','social_facebook','social_instagram'];
+async function loadSettings(){
+  try{
+    const{settings}=await adminApi.get('/api/settings/');
+    settings.forEach(s=>{const el=document.getElementById('set_'+s.key);if(el)el.value=s.value||'';});
+    const{admins}=await adminApi.get('/api/admins/');
+    document.getElementById('adminsTable').innerHTML=admins.map(a=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid rgba(0,0,0,.05)">
+        <div><div style="font-size:.88rem;font-weight:500">${a.name}</div><div style="font-size:.75rem;color:#888">${a.email}</div></div>
+        <span class="badge badge-${a.is_active?'green':'gray'}">${a.is_active?'Active':'Disabled'}</span>
+      </div>`).join('');
+  }catch(e){}
+}
+async function saveSettings(){
+  try{
+    await Promise.all(SETTINGS.map(key=>{
+      const el=document.getElementById('set_'+key);
+      if(!el)return Promise.resolve();
+      return adminApi.put(`/api/settings/${key}`,{value:el.value});
+    }));
+    showAlert('settingsAlert','✓ Settings saved!');
+  }catch(e){showAlert('settingsAlert',e.message,'error');}
+}
+async function changePassword(){
+  const np=document.getElementById('newPw').value;
+  if(np!==document.getElementById('confPw').value){showAlert('pwAlert','Passwords do not match','error');return;}
+  try{
+    await adminApi.post('/api/auth/change-password',{current_password:document.getElementById('curPw').value,new_password:np});
+    showAlert('pwAlert','✓ Password updated!');document.getElementById('curPw').value='';document.getElementById('newPw').value='';document.getElementById('confPw').value='';
+  }catch(e){showAlert('pwAlert',e.message,'error');}
+}
+async function addAdmin(){
+  try{
+    await adminApi.post('/api/admins/',{name:document.getElementById('newAdminName').value,email:document.getElementById('newAdminEmail').value,password:document.getElementById('newAdminPw').value});
+    showAlert('addAdminAlert','✓ Admin user created!');document.getElementById('newAdminName').value='';document.getElementById('newAdminEmail').value='';document.getElementById('newAdminPw').value='';loadSettings();
+  }catch(e){showAlert('addAdminAlert',e.message,'error');}
+}
+loadSettings();
+</script>
+</body>
+</html>

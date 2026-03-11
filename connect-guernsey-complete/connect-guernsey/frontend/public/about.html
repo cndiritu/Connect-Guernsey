@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>About — Connect Guernsey</title>
+<link rel="stylesheet" href="/assets/css/main.css">
+<style>
+.sub-nav{background:white;border-bottom:1px solid rgba(0,0,0,.06);padding:0 6rem;display:flex;position:sticky;top:70px;z-index:100;overflow-x:auto;}
+.sub-nav a{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:1rem 1.5rem;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
+.sub-nav a:hover,.sub-nav a.active{color:var(--navy);border-bottom-color:var(--gold);}
+.about-sec{padding:6rem;}
+.about-sec.alt{background:white;}
+.story-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:start;}
+.story-text p{font-size:.95rem;color:var(--muted);line-height:1.9;font-weight:300;margin-bottom:1.25rem;}
+.aside-box{background:var(--navy);padding:3rem;position:sticky;top:140px;}
+.aside-box h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:white;margin-bottom:1.75rem;}
+.tl{display:flex;gap:1.25rem;margin-bottom:1.5rem;}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:4px;}
+.tl-d{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem;}
+.tl-t{font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.6;}
+.mv-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:3rem;}
+.mvc{padding:3rem;}
+.mvc:nth-child(odd){background:var(--navy);}
+.mvc:nth-child(even){background:white;}
+.mvc h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;margin-bottom:1rem;}
+.mvc:nth-child(odd) h3{color:var(--gold);}
+.mvc:nth-child(even) h3{color:var(--navy);}
+.mvc p{font-size:.88rem;line-height:1.8;font-weight:300;}
+.mvc:nth-child(odd) p{color:rgba(255,255,255,.6);}
+.mvc:nth-child(even) p{color:var(--muted);}
+.pillars-dark{background:var(--navy-deep);padding:6rem;}
+.pf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:3rem;}
+.pfc{background:rgba(255,255,255,.04);padding:3rem;border-top:3px solid transparent;}
+.pfc:nth-child(1){border-top-color:var(--terra);}
+.pfc:nth-child(2){border-top-color:var(--forest);}
+.pfc:nth-child(3){border-top-color:var(--cobalt);}
+.pfc:hover{background:rgba(255,255,255,.07);}
+.pfc-icon{font-size:2rem;margin-bottom:1.5rem;}
+.pfc h3{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:white;margin-bottom:1rem;}
+.pfc p{font-size:.88rem;color:rgba(255,255,255,.5);line-height:1.8;}
+.pfc ul{margin-top:1.5rem;list-style:none;}
+.pfc ul li{font-size:.82rem;color:rgba(255,255,255,.4);padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:.5rem;}
+.pfc ul li::before{content:'→';color:var(--gold);font-size:.7rem;}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+.tc{background:white;text-align:center;padding:2rem 1.5rem;transition:transform .25s,box-shadow .25s;}
+.tc:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.08);}
+.tc-av{width:100px;height:100px;border-radius:50%;margin:0 auto 1.25rem;overflow:hidden;border:3px solid var(--cream);background:var(--navy);display:flex;align-items:center;justify-content:center;}
+.tc-av img{width:100%;height:100%;object-fit:cover;}
+.tc-init{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--gold);}
+.tc-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--navy);margin-bottom:.25rem;}
+.tc-role{font-size:.72rem;color:var(--muted);}
+.tc-tag{display:inline-block;margin-top:.5rem;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:100px;}
+.board-t{background:rgba(13,31,60,.08);color:var(--navy);}
+.committee-t{background:rgba(201,168,76,.12);color:#8a6d1e;}
+.sub-t{background:rgba(45,106,79,.1);color:var(--forest);}
+.tc-li{display:inline-block;margin-top:.6rem;font-size:.7rem;color:var(--cobalt);}
+.section-sub-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--navy);margin:2.5rem 0 1.5rem;padding-bottom:.75rem;border-bottom:1px solid rgba(0,0,0,.08);}
+@media(max-width:1024px){
+  .sub-nav{padding:0 1rem;}.about-sec{padding:4rem 2rem;}
+  .story-grid{grid-template-columns:1fr;gap:2rem;}.aside-box{position:static;}
+  .pillars-dark{padding:4rem 2rem;}.pf-grid{grid-template-columns:1fr;}
+  .team-grid{grid-template-columns:repeat(2,1fr);}.mv-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<nav id="nav"></nav>
+<div id="mobile-nav" class="nav-mobile"></div>
+<div class="page-hero">
+  <div class="section-label center">Our Organisation</div>
+  <h1>About Connect Guernsey</h1>
+  <p>A professional network built with purpose — for everyone who calls Guernsey home.</p>
+</div>
+<div class="mosaic-strip"><div class="ms-1"></div><div class="ms-2"></div><div class="ms-3"></div><div class="ms-4"></div><div class="ms-5"></div><div class="ms-6"></div><div class="ms-7"></div><div class="ms-8"></div><div class="ms-9"></div><div class="ms-10"></div></div>
+<div class="sub-nav">
+  <a href="#founding-story">Founding Story</a>
+  <a href="#mission">Mission &amp; Vision</a>
+  <a href="#pillars">Our Pillars</a>
+  <a href="#leadership">Leadership</a>
+</div>
+<section class="about-sec" id="founding-story">
+  <div class="story-grid reveal">
+    <div class="story-text">
+      <div class="section-label">Where it Began</div>
+      <h2 class="section-title" style="margin-bottom:2rem">Our Founding Story</h2>
+      <p>Connect Guernsey was founded in November 2025 by a group of professionals who shared a simple belief: that Guernsey deserved a professional network that truly reflected its community — diverse, ambitious, and deeply committed to the island.</p>
+      <p>What started as a conversation quickly became a movement. Within weeks, connections were being made and support was pouring in from Guernsey's Chamber of Commerce, Innovate Guernsey, and other leading organisations. It became clear that this was something the island had long needed.</p>
+      <p>We identified a gap — not just in networking opportunities, but in the sense of belonging that professionals from all backgrounds could feel when they built their lives in Guernsey. Connect Guernsey was created to bridge that gap.</p>
+      <p>We are currently formally incorporating as a company limited by guarantee, with our official launch planned for May 2026. The momentum behind us has been extraordinary, and we are grateful to everyone who has believed in this vision from the start.</p>
+    </div>
+    <div class="aside-box">
+      <h4>Key Milestones</h4>
+      <div class="tl"><div class="tl-dot"></div><div><div class="tl-d">November 2025</div><div class="tl-t">Connect Guernsey founded. First meeting held, pillars agreed, board and committee appointed.</div></div></div>
+      <div class="tl"><div class="tl-dot"></div><div><div class="tl-d">December 2025</div><div class="tl-t">Company formation documents drafted. Financial crime and AML policies prepared.</div></div></div>
+      <div class="tl"><div class="tl-dot"></div><div><div class="tl-d">January 2026</div><div class="tl-t">Documents filed with the Guernsey Registry. Social media and website launched.</div></div></div>
+      <div class="tl"><div class="tl-dot"></div><div><div class="tl-d">May 2026</div><div class="tl-t">Official launch event — open to all professionals across the island.</div></div></div>
+      <div class="tl"><div class="tl-dot"></div><div><div class="tl-d">July 2026</div><div class="tl-t">Summer Networking Evening — members event.</div></div></div>
+      <div class="tl"><div class="tl-dot"></div><div><div class="tl-d">September 2026</div><div class="tl-t">Autumn Members Evening — intimate gathering across all three pillars.</div></div></div>
+    </div>
+  </div>
+</section>
+<section class="about-sec alt" id="mission">
+  <div class="reveal text-center" style="max-width:700px;margin:0 auto 3rem">
+    <div class="section-label center">What Drives Us</div>
+    <h2 class="section-title">Mission &amp; Vision</h2>
+  </div>
+  <div class="mv-grid reveal">
+    <div class="mvc"><h3>Our Mission</h3><p data-content="about.mission.body">To build a professional community that brings Guernsey's people closer together, creating connections that drive careers, grow businesses, and strengthen the island.</p></div>
+    <div class="mvc"><h3>Our Vision</h3><p data-content="about.vision.body">A Guernsey where every professional has access to a network that supports their growth and helps them contribute to the island's future.</p></div>
+    <div class="mvc"><h3>Our Values</h3><p>Inclusivity, integrity, professional excellence, and a genuine commitment to Guernsey. We believe the strongest communities are built on trust, and we hold ourselves to the highest standard in everything we do.</p></div>
+    <div class="mvc"><h3>Our Approach</h3><p>We connect people first — then let professional value follow naturally. Every event and initiative at Connect Guernsey is designed to create genuine, lasting connections rather than transactional networking.</p></div>
+  </div>
+</section>
+<section class="pillars-dark" id="pillars">
+  <div class="reveal text-center">
+    <div class="section-label center" style="color:var(--gold)">The Foundation</div>
+    <h2 class="section-title white">Our Three Pillars</h2>
+    <p style="color:rgba(255,255,255,.5);max-width:600px;margin:1rem auto 0;font-weight:300;line-height:1.8;">Everything Connect Guernsey does is anchored to one of these three pillars. Together they form a complete professional ecosystem.</p>
+  </div>
+  <div class="pf-grid reveal">
+    <div class="pfc"><div class="pfc-icon">🤝</div><h3>Networking</h3><p>Bringing together professionals across Guernsey's industries through social events, topic-specific seminars, and talks designed to forge lasting business relationships.</p><ul><li>Professional social evenings</li><li>Industry-specific seminars</li><li>Guest speaker events</li><li>Cross-sector mixers</li><li>Open and members-only formats</li></ul></div>
+    <div class="pfc"><div class="pfc-icon">🚀</div><h3>Investment &amp; Entrepreneurship</h3><p>Collaborating with like-minded organisations to inspire entrepreneurship, foster knowledge growth, and connect members with speakers who shape the business landscape.</p><ul><li>Collaboration with Innovate Guernsey</li><li>Investor–founder connections</li><li>Entrepreneurship workshops</li><li>Business growth seminars</li><li>Startup community support</li></ul></div>
+    <div class="pfc"><div class="pfc-icon">🌱</div><h3>Career Support &amp; Mentorship</h3><p>Developing meaningful professional relationships amongst members to accelerate career growth, while mentoring the next generation of Guernsey's talent.</p><ul><li>Member-to-member mentoring</li><li>Career development support</li><li>Young professional outreach</li><li>Professional skills sessions</li><li>Industry introductions</li></ul></div>
+  </div>
+</section>
+<section class="about-sec" id="leadership">
+  <div class="reveal" style="margin-bottom:2.5rem">
+    <div class="section-label">The People Behind Connect</div>
+    <h2 class="section-title">Our Leadership</h2>
+    <p style="color:var(--muted);font-size:.92rem;max-width:600px;line-height:1.8;margin-top:1rem;font-weight:300">Connect Guernsey is led by a committed board and committee of professionals who volunteered their time, energy and expertise to bring this vision to life.</p>
+  </div>
+  <div id="leadershipContent"><div style="color:var(--muted);font-size:.88rem;padding:2rem 0">Loading team...</div></div>
+</section>
+<div class="mosaic-strip"><div class="ms-1"></div><div class="ms-2"></div><div class="ms-3"></div><div class="ms-4"></div><div class="ms-5"></div><div class="ms-6"></div><div class="ms-7"></div><div class="ms-8"></div><div class="ms-9"></div><div class="ms-10"></div></div>
+<section style="background:var(--navy);padding:5rem 6rem;text-align:center">
+  <div class="reveal">
+    <h2 class="section-title white" style="margin-bottom:1.5rem">Ready to be part of it?</h2>
+    <p style="color:rgba(255,255,255,.5);max-width:500px;margin:0 auto 2rem;line-height:1.8;font-weight:300">Connect Guernsey is open to all professionals on the island. Join us and help shape what Guernsey's professional community becomes.</p>
+    <a href="/membership.html#register" class="btn btn-gold">Become a Member</a>
+  </div>
+</section>
+<footer></footer>
+<script src="/assets/js/api.js"></script>
+<script>
+function tc(m){
+  const tagCls=m.board_type==='board'?'board-t':m.board_type==='committee'?'committee-t':'sub-t';
+  const tagLbl=m.board_type==='board'?'Board':m.board_type==='committee'?'Committee':'Sub-Committee';
+  return`<div class="tc reveal">
+    <div class="tc-av">${m.image_url?`<img src="${m.image_url}" alt="${m.name}">`:`<span class="tc-init">${m.name.charAt(0)}</span>`}</div>
+    <div class="tc-name">${m.name}</div><div class="tc-role">${m.role}</div>
+    <span class="tc-tag ${tagCls}">${tagLbl}</span>
+    ${m.linkedin_url?`<br><a class="tc-li" href="${m.linkedin_url}" target="_blank">LinkedIn →</a>`:''}
+  </div>`;
+}
+async function loadTeam(){
+  try{
+    const{team}=await api.get('/api/team/public');
+    const board=team.filter(m=>m.board_type==='board');
+    const committee=team.filter(m=>m.board_type==='committee');
+    const sub=team.filter(m=>m.board_type==='sub_committee');
+    let html='';
+    if(board.length){html+=`<div class="section-sub-title">Board of Directors</div><div class="team-grid">${board.map(tc).join('')}</div>`;}
+    if(committee.length){html+=`<div class="section-sub-title">Committee</div><div class="team-grid">${committee.map(tc).join('')}</div>`;}
+    if(sub.length){html+=`<div class="section-sub-title">Sub-Committees</div><div class="team-grid">${sub.map(tc).join('')}</div>`;}
+    if(!html)html='<p style="color:var(--muted);font-size:.88rem">Team information coming soon.</p>';
+    document.getElementById('leadershipContent').innerHTML=html;
+    initReveal();
+  }catch(e){document.getElementById('leadershipContent').innerHTML='<p style="color:var(--muted);font-size:.88rem">Team information coming soon.</p>';}
+}
+window.addEventListener('scroll',()=>{
+  let cur='';
+  ['founding-story','mission','pillars','leadership'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top<160)cur=id;
+  });
+  document.querySelectorAll('.sub-nav a').forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur);});
+});
+document.addEventListener('DOMContentLoaded',async()=>{
+  buildNav('about');await loadContent();fillAll();loadTeam();
+  document.querySelectorAll('.sub-nav a').forEach(a=>{
+    a.addEventListener('click',e=>{e.preventDefault();document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth',block:'start'});});
+  });
+});
+</script>
+</body>
+</html>

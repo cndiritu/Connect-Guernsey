@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Team — Connect Guernsey Admin</title>
+<link rel="stylesheet" href="/admin/assets/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+  <div class="sidebar" id="sidebar"></div>
+  <div class="main-content">
+    <div class="top-bar"><div class="page-title">Team Members</div><div class="top-actions"><button class="btn btn-gold" onclick="openTeamModal()">+ Add Member</button></div></div>
+    <div class="page-body">
+      <div class="card"><div class="card-body"><div class="table-wrap"><table>
+        <thead><tr><th>Name</th><th>Role</th><th>Board Type</th><th>Pillar</th><th>Order</th><th>Active</th><th>Actions</th></tr></thead>
+        <tbody id="teamTable"><tr><td colspan="7" style="color:#aaa">Loading...</td></tr></tbody>
+      </table></div></div></div>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="teamModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="teamModalTitle">Add Team Member</span><button class="modal-close" onclick="closeTeamModal()">×</button></div>
+    <div class="modal-body">
+      <div id="teamAlert"></div>
+      <input type="hidden" id="teamMemberId">
+      <div class="form-row">
+        <div class="form-group"><label>Name *</label><input type="text" id="tmName" required></div>
+        <div class="form-group"><label>Role *</label><input type="text" id="tmRole" required placeholder="e.g. Chairperson"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Board Type *</label>
+          <select id="tmBoardType" onchange="togglePillar()">
+            <option value="board">Board</option>
+            <option value="committee">Committee</option>
+            <option value="sub_committee">Sub-Committee</option>
+          </select>
+        </div>
+        <div class="form-group" id="pillarGroup" style="display:none"><label>Pillar</label>
+          <select id="tmPillar">
+            <option value="">N/A</option>
+            <option value="networking">Networking</option>
+            <option value="investment">Investment &amp; Entrepreneurship</option>
+            <option value="career">Career Support &amp; Mentorship</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Photo URL</label><input type="url" id="tmImage" placeholder="https://..."></div>
+      <div class="form-group"><label>LinkedIn URL</label><input type="url" id="tmLinkedIn" placeholder="https://linkedin.com/in/..."></div>
+      <div class="form-group"><label>Bio</label><textarea id="tmBio" style="height:100px" placeholder="Short professional biography"></textarea></div>
+      <div class="form-group"><label>Display Order</label><input type="number" id="tmOrder" value="0"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeTeamModal()">Cancel</button><button class="btn btn-gold" onclick="saveTeamMember()" id="saveTeamBtn">Save</button></div>
+  </div>
+</div>
+<script src="/admin/assets/admin.js"></script>
+<script>
+if(!requireAuth())throw '';
+buildSidebar('team');
+let editingTeamId=null;
+function togglePillar(){document.getElementById('pillarGroup').style.display=document.getElementById('tmBoardType').value==='sub_committee'?'block':'none';}
+async function loadTeam(){
+  try{
+    const{team}=await adminApi.get('/api/team/');
+    document.getElementById('teamTable').innerHTML=team.map(m=>`
+      <tr>
+        <td><strong>${m.name}</strong></td>
+        <td style="font-size:.82rem">${m.role}</td>
+        <td><span class="badge badge-${m.board_type==='board'?'blue':m.board_type==='committee'?'amber':'green'}">${m.board_type.replace('_',' ')}</span></td>
+        <td style="font-size:.82rem">${m.pillar||'—'}</td>
+        <td style="font-size:.82rem">${m.display_order}</td>
+        <td><span class="badge badge-${m.is_active?'green':'gray'}">${m.is_active?'Active':'Hidden'}</span></td>
+        <td style="display:flex;gap:.4rem">
+          <button class="btn btn-ghost btn-sm" onclick='editTeamMember(${JSON.stringify(m).replace(/'/g,"&#39;")})'>Edit</button>
+          <button class="btn btn-red btn-sm" onclick="deleteTeamMember('${m.id}','${m.name}')">Remove</button>
+        </td>
+      </tr>`).join('')||'<tr><td colspan="7" style="color:#aaa">No team members added yet</td></tr>';
+  }catch(e){}
+}
+function openTeamModal(){editingTeamId=null;document.getElementById('teamModalTitle').textContent='Add Team Member';document.getElementById('tmName').value='';document.getElementById('tmRole').value='';document.getElementById('tmBoardType').value='board';document.getElementById('tmPillar').value='';document.getElementById('tmImage').value='';document.getElementById('tmLinkedIn').value='';document.getElementById('tmBio').value='';document.getElementById('tmOrder').value='0';togglePillar();document.getElementById('teamModal').classList.add('open');}
+function closeTeamModal(){document.getElementById('teamModal').classList.remove('open');}
+function editTeamMember(m){editingTeamId=m.id;document.getElementById('teamModalTitle').textContent='Edit Team Member';document.getElementById('tmName').value=m.name||'';document.getElementById('tmRole').value=m.role||'';document.getElementById('tmBoardType').value=m.board_type||'board';document.getElementById('tmPillar').value=m.pillar||'';document.getElementById('tmImage').value=m.image_url||'';document.getElementById('tmLinkedIn').value=m.linkedin_url||'';document.getElementById('tmBio').value=m.bio||'';document.getElementById('tmOrder').value=m.display_order||0;togglePillar();document.getElementById('teamModal').classList.add('open');}
+async function saveTeamMember(){
+  const btn=document.getElementById('saveTeamBtn');btn.textContent='Saving...';btn.disabled=true;
+  const data={name:document.getElementById('tmName').value,role:document.getElementById('tmRole').value,board_type:document.getElementById('tmBoardType').value,pillar:document.getElementById('tmPillar').value||null,image_url:document.getElementById('tmImage').value||null,linkedin_url:document.getElementById('tmLinkedIn').value||null,bio:document.getElementById('tmBio').value,display_order:parseInt(document.getElementById('tmOrder').value)||0};
+  try{
+    if(editingTeamId)await adminApi.patch(`/api/team/${editingTeamId}`,data);
+    else await adminApi.post('/api/team/',data);
+    closeTeamModal();loadTeam();
+  }catch(e){showAlert('teamAlert',e.message,'error');}
+  btn.textContent='Save';btn.disabled=false;
+}
+async function deleteTeamMember(id,name){if(!window.confirm(`Remove ${name} from the team?`))return;try{await adminApi.delete(`/api/team/${id}`);loadTeam();}catch(e){alert(e.message);}}
+loadTeam();
+</script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Connect Guernsey — Network · Grow · Belong</title>
+<meta name="description" content="Connect Guernsey is a professional network bringing together the island's ambitious professionals across industries and backgrounds.">
+<link rel="stylesheet" href="/assets/css/main.css">
+<style>
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:var(--navy-deep);padding-top:70px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(201,168,76,.06),transparent 60%);}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:5rem 4rem 5rem 6rem;position:relative;z-index:2;}
+.eyebrow{display:flex;align-items:center;gap:1rem;margin-bottom:2rem;}
+.eyebrow-line{width:36px;height:1px;background:var(--gold);}
+.eyebrow span{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,5.5vw,5.5rem);font-weight:300;line-height:1.05;color:white;margin-bottom:1.5rem;}
+.hero-h1 em{font-style:italic;color:var(--gold-l);}
+.grad{background:linear-gradient(135deg,var(--terra),var(--amber),var(--forest),var(--cobalt),var(--violet));background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradShift 6s ease infinite;font-style:italic;}
+.hero-body{font-size:1rem;color:rgba(255,255,255,.6);max-width:480px;line-height:1.8;margin-bottom:2.5rem;font-weight:300;}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:2.5rem;margin-top:3rem;padding-top:2.5rem;border-top:1px solid rgba(255,255,255,.08);}
+.hstat-num{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;color:var(--gold);line-height:1;}
+.hstat-lbl{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:.3rem;}
+.hero-right{position:relative;overflow:hidden;}
+.hero-mosaic{position:absolute;inset:0;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(7,1fr);gap:3px;}
+.hmc{animation:mReveal .8s ease both;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,var(--navy-deep),transparent 55%);display:flex;align-items:flex-end;padding:4rem 3rem;z-index:2;}
+.hero-quote{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;font-style:italic;color:rgba(255,255,255,.8);line-height:1.4;border-left:2px solid var(--gold);padding-left:1.5rem;}
+.mission{background:var(--navy);padding:6rem;display:grid;grid-template-columns:1.2fr 1fr;gap:6rem;align-items:center;}
+.mission-text .section-title{color:white;margin-bottom:1.5rem;}
+.mission-text p{color:rgba(255,255,255,.6);line-height:1.85;font-weight:300;font-size:.95rem;}
+.mission-text p+p{margin-top:1rem;}
+.mv-visual{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+.mv-tile{padding:2.5rem;display:flex;flex-direction:column;justify-content:flex-end;}
+.mv-n{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:white;line-height:1;}
+.mv-l{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:.4rem;}
+.pillars{padding:7rem 6rem;background:var(--cream);}
+.pillars-hdr{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:end;margin-bottom:4rem;}
+.pillars-intro{font-size:.92rem;color:var(--muted);line-height:1.8;font-weight:300;}
+.pc{background:white;padding:3rem 2.5rem;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s;}
+.pc:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.1);}
+.pc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;transition:width .3s;}
+.pc:nth-child(1)::before{background:var(--terra);}
+.pc:nth-child(2)::before{background:var(--forest);}
+.pc:nth-child(3)::before{background:var(--cobalt);}
+.pc-n{font-family:'Cormorant Garamond',serif;font-size:5rem;font-weight:300;opacity:.07;color:var(--navy);line-height:1;margin-bottom:.5rem;}
+.pc-icon{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.5rem;}
+.pc:nth-child(1) .pc-icon{background:rgba(196,98,45,.1);}
+.pc:nth-child(2) .pc-icon{background:rgba(45,106,79,.1);}
+.pc:nth-child(3) .pc-icon{background:rgba(27,79,138,.1);}
+.pc h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--navy);margin-bottom:1rem;}
+.pc p{font-size:.88rem;color:var(--muted);line-height:1.8;font-weight:300;}
+.pc-tag{display:inline-block;margin-top:1.5rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:.3rem .8rem;border-radius:100px;}
+.pc:nth-child(1) .pc-tag{background:rgba(196,98,45,.1);color:var(--terra);}
+.pc:nth-child(2) .pc-tag{background:rgba(45,106,79,.1);color:var(--forest);}
+.pc:nth-child(3) .pc-tag{background:rgba(27,79,138,.1);color:var(--cobalt);}
+.events-sec{padding:7rem 6rem;background:white;}
+.events-hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3.5rem;}
+.ev-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:2px;}
+.evc{background:var(--cream);padding:2.5rem;transition:transform .25s;cursor:pointer;}
+.evc:hover{transform:translateY(-4px);}
+.evc.feat{background:var(--navy);}
+.ev-tag{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;display:inline-block;padding:.3rem .8rem;border-radius:100px;margin-bottom:1.5rem;}
+.evc.feat .ev-tag{background:rgba(201,168,76,.2);color:var(--gold);}
+.evc:not(.feat) .ev-tag{background:rgba(13,31,60,.08);color:var(--navy);}
+.ev-mon{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--gold);line-height:1;}
+.ev-yr{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem;}
+.evc:not(.feat) .ev-yr{color:var(--muted);}
+.evc h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:white;margin-bottom:.75rem;}
+.evc:not(.feat) h3{color:var(--navy);}
+.evc p{font-size:.84rem;color:rgba(255,255,255,.5);line-height:1.7;font-weight:300;}
+.evc:not(.feat) p{color:var(--muted);}
+.ev-loc{margin-top:1.25rem;font-size:.72rem;color:rgba(255,255,255,.3);}
+.evc:not(.feat) .ev-loc{color:var(--muted);}
+.community{background:var(--cream);padding:7rem 6rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;}
+.blog-sec{padding:7rem 6rem;background:var(--navy);}
+.blog-hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3.5rem;}
+.bc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);padding:2.5rem;transition:background .25s,transform .25s;cursor:pointer;}
+.bc:hover{background:rgba(255,255,255,.08);transform:translateY(-4px);}
+.bc-cat{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;display:inline-block;padding:.25rem .75rem;border-radius:100px;margin-bottom:1rem;}
+.bc h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:white;line-height:1.3;margin-bottom:.75rem;}
+.bc p{font-size:.84rem;color:rgba(255,255,255,.45);line-height:1.7;font-weight:300;}
+.bc-meta{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.06);font-size:.72rem;color:rgba(255,255,255,.25);display:flex;justify-content:space-between;}
+.pstrip{background:var(--cream);padding:3rem 6rem;display:flex;align-items:center;gap:4rem;border-top:1px solid rgba(0,0,0,.06);}
+.pstrip-lbl{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.pstrip-logos{display:flex;gap:3rem;align-items:center;flex:1;flex-wrap:wrap;}
+.pname{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:rgba(13,31,60,.3);letter-spacing:.08em;transition:color .2s;cursor:pointer;}
+.pname:hover{color:var(--navy);}
+.cta-sec{background:var(--navy-deep);padding:8rem 6rem;text-align:center;position:relative;overflow:hidden;}
+.cta-mosaicbg{position:absolute;inset:0;display:grid;grid-template-columns:repeat(20,1fr);grid-template-rows:repeat(10,1fr);opacity:.07;}
+.cta-inner{position:relative;z-index:2;}
+.cta-ey{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;}
+.cta-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:300;color:white;line-height:1.1;margin-bottom:1.5rem;}
+.cta-h2 em{font-style:italic;background:linear-gradient(135deg,var(--terra),var(--amber),var(--forest),var(--cobalt));background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradShift 5s ease infinite;}
+.cta-p{font-size:1rem;color:rgba(255,255,255,.5);max-width:520px;margin:0 auto 3rem;line-height:1.8;font-weight:300;}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+@keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes mReveal{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr;}.hero-right{display:none;}.hero-left{padding:4rem 2rem;}
+  .mission,.pillars,.community,.blog-sec,.events-sec,.cta-sec{padding:4rem 2rem;}
+  .pillars-hdr{grid-template-columns:1fr;gap:1.5rem;}.ev-grid{grid-template-columns:1fr;}
+  .mission{grid-template-columns:1fr;}.community{grid-template-columns:1fr;}
+  .pstrip{padding:2rem;flex-direction:column;gap:1.5rem;}
+}
+</style>
+</head>
+<body>
+<nav id="nav"></nav>
+<div id="mobile-nav" class="nav-mobile"></div>
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow"><div class="eyebrow-line"></div><span>Guernsey's Professional Network</span></div>
+    <h1 class="hero-h1">Rooted in Guernsey.<br><em>Built for</em> <span class="grad">everyone.</span></h1>
+    <p class="hero-body" data-content="home.hero.subtitle">Connect Guernsey is a professional network where ambition, experience and fresh perspective come together.</p>
+    <div class="hero-actions">
+      <a href="/membership.html#register" class="btn btn-gold">Become a Member</a>
+      <a href="/about.html" class="btn btn-ghost-white">Our Story</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hstat-num">3</div><div class="hstat-lbl">Core Pillars</div></div>
+      <div><div class="hstat-num">7</div><div class="hstat-lbl">Continents</div></div>
+      <div><div class="hstat-num">2026</div><div class="hstat-lbl">Launch Year</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-mosaic" id="heroMosaic"></div>
+    <div class="hero-overlay"><div class="hero-quote">"Every great community<br>is built one connection<br>at a time."</div></div>
+  </div>
+</section>
+<div class="mosaic-strip"><div class="ms-1"></div><div class="ms-2"></div><div class="ms-3"></div><div class="ms-4"></div><div class="ms-5"></div><div class="ms-6"></div><div class="ms-7"></div><div class="ms-8"></div><div class="ms-9"></div><div class="ms-10"></div></div>
+<section class="mission reveal">
+  <div class="mission-text">
+    <div class="section-label">Our Mission</div>
+    <h2 class="section-title white" data-content="home.mission.title">Growing together, as one community</h2>
+    <p data-content="home.mission.body">Connect Guernsey was created to bring the island's professional community closer together.</p>
+    <p style="margin-top:1rem" data-content="home.mission.body2">Whether you were born here, have made Guernsey your home, or are building your career on this island — Connect Guernsey is your community.</p>
+    <div style="margin-top:2.5rem"><a href="/about.html" class="btn btn-gold">Learn More About Us</a></div>
+  </div>
+  <div class="mv-visual">
+    <div class="mv-tile" style="background:var(--terra);opacity:.9"><div class="mv-n">3</div><div class="mv-l">Core Pillars</div></div>
+    <div class="mv-tile" style="background:var(--forest);opacity:.9"><div class="mv-n">7</div><div class="mv-l">Continents</div></div>
+    <div class="mv-tile" style="background:var(--cobalt);opacity:.9"><div class="mv-n">1</div><div class="mv-l">Island Home</div></div>
+    <div class="mv-tile" style="background:var(--violet);opacity:.9"><div class="mv-n">∞</div><div class="mv-l">Connections</div></div>
+  </div>
+</section>
+<div class="mosaic-strip"><div class="ms-1"></div><div class="ms-2"></div><div class="ms-3"></div><div class="ms-4"></div><div class="ms-5"></div><div class="ms-6"></div><div class="ms-7"></div><div class="ms-8"></div><div class="ms-9"></div><div class="ms-10"></div></div>
+<section class="pillars">
+  <div class="pillars-hdr reveal">
+    <div><div class="section-label">What We Stand For</div><h2 class="section-title">Three pillars.<br>One community.</h2></div>
+    <p class="pillars-intro">Every event, conversation and connection at Connect Guernsey is anchored to one of our three founding pillars — forming a complete ecosystem for professional growth.</p>
+  </div>
+  <div class="grid-3">
+    <div class="pc reveal"><div class="pc-n">01</div><div class="pc-icon">🤝</div><h3>Networking</h3><p>Professional social events, thematic seminars, and industry talks designed to create genuine connections that grow your career and business on the island and beyond.</p><span class="pc-tag">Events &amp; Seminars</span></div>
+    <div class="pc reveal"><div class="pc-n">02</div><div class="pc-icon">🚀</div><h3>Investment &amp; Entrepreneurship</h3><p>Collaborating with Innovate Guernsey and forward-thinking partners to inspire entrepreneurship, connect investors with founders, and fuel Guernsey's next generation of business.</p><span class="pc-tag">Growth &amp; Innovation</span></div>
+    <div class="pc reveal"><div class="pc-n">03</div><div class="pc-icon">🌱</div><h3>Career Support &amp; Mentorship</h3><p>Meaningful mentorship between experienced professionals and those earlier in their careers — developing relationships that accelerate growth for everyone involved.</p><span class="pc-tag">Mentorship &amp; Development</span></div>
+  </div>
+</section>
+<section class="events-sec">
+  <div class="events-hdr reveal">
+    <div><div class="section-label">What's On</div><h2 class="section-title">Upcoming Events</h2></div>
+    <a href="/events.html" class="btn btn-ghost">View All Events →</a>
+  </div>
+  <div class="ev-grid" id="evGrid">
+    <div class="evc feat"><span class="ev-tag">⭐ Official Launch</span><div class="ev-mon">May</div><div class="ev-yr">2026</div><h3>Connect Guernsey Launch</h3><p>The official launch — an open evening for professionals across the island. Meet the team, hear from a guest speaker, and be part of something new.</p><div class="ev-loc">📍 Guernsey — Venue TBC</div></div>
+    <div class="evc"><span class="ev-tag">Members Event</span><div class="ev-mon" style="color:var(--navy)">Jul</div><div class="ev-yr">Summer 2026</div><h3>Summer Networking Evening</h3><p>An informal summer evening for members — great conversation, new connections, and a chance to enjoy the island at its best.</p><div class="ev-loc">📍 Guernsey</div></div>
+    <div class="evc"><span class="ev-tag">Members Only</span><div class="ev-mon" style="color:var(--navy)">Sep</div><div class="ev-yr">Autumn 2026</div><h3>Members Evening</h3><p>Our autumn members evening — an intimate gathering focused on meaningful connection across our three pillars.</p><div class="ev-loc">📍 Guernsey</div></div>
+  </div>
+</section>
+<section class="community reveal">
+  <div>
+    <div class="section-label">Our Community</div>
+    <h2 class="section-title" data-content="home.community.title">Different journeys. One destination.</h2>
+    <p style="color:var(--muted);font-size:.92rem;line-height:1.8;font-weight:300;margin:1.5rem 0 2rem" data-content="home.community.body">Our members have taken many different paths to get here — but they share something in common.</p>
+    <a href="/membership.html" class="btn btn-navy">Join the Community</a>
+  </div>
+  <div id="teamPrev" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;"></div>
+</section>
+<section class="blog-sec">
+  <div class="blog-hdr reveal">
+    <div><div class="section-label" style="color:var(--gold)">Latest from Connect</div><h2 class="section-title white">News &amp; Insights</h2></div>
+    <a href="/blog.html" style="color:rgba(255,255,255,.4);font-size:.78rem;letter-spacing:.1em">View all →</a>
+  </div>
+  <div class="grid-3" id="blogGrid">
+    <div class="bc"><span class="bc-cat" style="background:rgba(196,98,45,.2);color:#e07d50">Networking</span><h3>Why Guernsey Needs a Dedicated Professional Network Right Now</h3><p>The island's finance sector is evolving rapidly. Now is the perfect moment to build connections that define the next decade.</p><div class="bc-meta"><span>Connect Guernsey</span><span>Nov 2025</span></div></div>
+    <div class="bc"><span class="bc-cat" style="background:rgba(45,106,79,.2);color:#5aad8a">Entrepreneurship</span><h3>Innovation on a Small Island: The Unique Guernsey Advantage</h3><p>Small doesn't mean limited. How Guernsey's size and international connections make it an ideal launchpad for entrepreneurs.</p><div class="bc-meta"><span>Connect Guernsey</span><span>Dec 2025</span></div></div>
+    <div class="bc"><span class="bc-cat" style="background:rgba(92,61,143,.2);color:#9b7fd4">Mentorship</span><h3>The Power of Mentorship in a Tight-Knit Community</h3><p>On an island of 63,000 people, mentorship relationships can form faster and go deeper than anywhere else.</p><div class="bc-meta"><span>Connect Guernsey</span><span>Jan 2026</span></div></div>
+  </div>
+</section>
+<div class="pstrip reveal" id="pstrip">
+  <span class="pstrip-lbl">Partners &amp; Collaborators</span>
+  <div class="pstrip-logos" id="plogos"><span class="pname">Guernsey Chamber of Commerce</span><span class="pname">Innovate Guernsey</span><span class="pname">Mosaic Network</span></div>
+</div>
+<section class="cta-sec">
+  <div class="cta-mosaicbg" id="ctaBg"></div>
+  <div class="cta-inner reveal">
+    <p class="cta-ey">Join the Movement</p>
+    <h2 class="cta-h2">Your place in<br><em>Guernsey's network.</em></h2>
+    <p class="cta-p" data-content="home.cta.body">Connect Guernsey is launching in 2026. Whether you've lived here your whole life or arrived more recently — this is your community too.</p>
+    <div class="cta-btns"><a href="/membership.html#register" class="btn btn-gold">Register Interest</a><a href="/about.html" class="btn btn-ghost-white">Learn More</a></div>
+  </div>
+</section>
+<footer></footer>
+<script src="/assets/js/api.js"></script>
+<script>
+const MC=['#C4622D','#E8A030','#2D6A4F','#8B2635','#1B4F8A','#5C3D8F','#1A7A7A','#B5485A','#c9a84c','#0d1f3c','#1a3460','#060f1e'];
+function buildHeroMosaic(){
+  const g=document.getElementById('heroMosaic');if(!g)return;
+  for(let i=0;i<35;i++){const c=document.createElement('div');c.className='hmc';c.style.background=MC[Math.floor(Math.random()*MC.length)];c.style.opacity=.3+Math.random()*.7;c.style.animationDelay=Math.random()*1.5+'s';if(Math.random()>.7)c.style.clipPath='polygon(0 0,100% 0,100% 70%,0 100%)';g.appendChild(c);}
+  setInterval(()=>{g.querySelectorAll('.hmc').forEach(c=>{if(Math.random()>.85)c.style.opacity=.1+Math.random()*.9;});},1800);
+}
+function buildCtaBg(){
+  const bg=document.getElementById('ctaBg');if(!bg)return;
+  for(let i=0;i<200;i++){const c=document.createElement('div');c.style.background=MC[i%MC.length];bg.appendChild(c);}
+}
+async function loadEvents(){
+  try{
+    const{events}=await api.get('/api/events/public');
+    if(!events||!events.length)return;
+    document.getElementById('evGrid').innerHTML=events.slice(0,3).map((e,i)=>`
+      <div class="evc ${i===0?'feat':''}" onclick="location.href='/events.html#${e.slug||e.id}'">
+        <span class="ev-tag">${e.event_type==='members_only'?'Members Only':'Open Event'}</span>
+        <div class="ev-mon" ${i!==0?'style="color:var(--navy)"':''}>${new Date(e.event_date).toLocaleDateString('en-GB',{month:'short'})}</div>
+        <div class="ev-yr">${new Date(e.event_date).getFullYear()}</div>
+        <h3>${e.title}</h3><p>${(e.short_description||e.description).substring(0,120)}...</p>
+        <div class="ev-loc">📍 ${e.location}</div>
+      </div>`).join('');
+  }catch(e){}
+}
+async function loadTeam(){
+  try{
+    const{team}=await api.get('/api/team/public');
+    if(!team||!team.length)return;
+    document.getElementById('teamPrev').innerHTML=team.slice(0,3).map(m=>`
+      <div style="background:white;padding:1.5rem;text-align:center;">
+        <div style="width:80px;height:80px;border-radius:50%;margin:0 auto 1rem;overflow:hidden;background:var(--navy);display:flex;align-items:center;justify-content:center;">${m.image_url?`<img src="${m.image_url}" style="width:100%;height:100%;object-fit:cover">`:`<span style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold)">${m.name.charAt(0)}</span>`}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--navy)">${m.name}</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-top:.25rem">${m.role}</div>
+      </div>`).join('');
+  }catch(e){}
+}
+async function loadPartners(){
+  try{
+    const{partners}=await api.get('/api/partners/public');
+    if(!partners||!partners.length)return;
+    document.getElementById('plogos').innerHTML=partners.map(p=>`<span class="pname" onclick="location.href='/partners.html'">${p.name}</span>`).join('');
+  }catch(e){}
+}
+async function loadBlog(){
+  try{
+    const{posts}=await api.get('/api/blog/public?limit=3');
+    if(!posts||!posts.length)return;
+    const CATS={Networking:'rgba(196,98,45,.2);color:#e07d50',Entrepreneurship:'rgba(45,106,79,.2);color:#5aad8a',Mentorship:'rgba(92,61,143,.2);color:#9b7fd4'};
+    document.getElementById('blogGrid').innerHTML=posts.map(p=>{
+      const cs=(CATS[p.category]||'rgba(201,168,76,.2);color:var(--gold)').split(';');
+      return`<div class="bc" onclick="location.href='/blog.html#${p.slug}'">
+        <span class="bc-cat" style="background:${cs[0]};${cs[1]}">${p.category||'News'}</span>
+        <h3>${p.title}</h3><p>${p.excerpt||(p.content||'').substring(0,140)}...</p>
+        <div class="bc-meta"><span>${p.author||'Connect Guernsey'}</span><span>${formatMonth(p.published_at)}</span></div>
+      </div>`;}).join('');
+  }catch(e){}
+}
+document.addEventListener('DOMContentLoaded',async()=>{
+  buildNav('home');buildHeroMosaic();buildCtaBg();
+  await loadContent();fillAll();
+  loadEvents();loadTeam();loadPartners();loadBlog();
+});
+</script>
+</body>
+</html>

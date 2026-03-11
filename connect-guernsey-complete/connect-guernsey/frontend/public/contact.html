@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Contact — Connect Guernsey</title>
+<link rel="stylesheet" href="/assets/css/main.css">
+<style>
+.contact-layout{padding:5rem 6rem;background:var(--cream);display:grid;grid-template-columns:1fr 1.3fr;gap:6rem;align-items:start;}
+.contact-info h2{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--navy);margin-bottom:1.5rem;}
+.contact-info p{color:var(--muted);line-height:1.8;font-weight:300;margin-bottom:2rem;}
+.contact-detail{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.5rem;}
+.cd-icon{width:44px;height:44px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.cd-info h4{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem;}
+.cd-info p{font-size:.88rem;color:var(--navy);font-weight:500;}
+.contact-socials{display:flex;gap:.75rem;margin-top:2rem;}
+.social-btn{width:44px;height:44px;background:var(--navy);color:white;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:background .2s;cursor:pointer;text-decoration:none;}
+.social-btn:hover{background:var(--gold);}
+.contact-form-box{background:white;padding:3rem;}
+.contact-form-box h3{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--navy);margin-bottom:2rem;}
+.interest-chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.ic{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;padding:.4rem .9rem;border:1px solid rgba(0,0,0,.15);cursor:pointer;transition:all .2s;background:transparent;font-family:'DM Sans',sans-serif;}
+.ic.sel,.ic:hover{background:var(--navy);color:white;border-color:var(--navy);}
+@media(max-width:1024px){.contact-layout{grid-template-columns:1fr;padding:3rem 2rem;gap:3rem;}}
+</style>
+</head>
+<body>
+<nav id="nav"></nav>
+<div id="mobile-nav" class="nav-mobile"></div>
+<div class="page-hero">
+  <div class="section-label center">Reach Out</div>
+  <h1 data-content="contact.hero.title">Get in Touch</h1>
+  <p data-content="contact.hero.body">Whether you're interested in membership, partnership, or simply want to know more — we'd love to hear from you.</p>
+</div>
+<div class="mosaic-strip"><div class="ms-1"></div><div class="ms-2"></div><div class="ms-3"></div><div class="ms-4"></div><div class="ms-5"></div><div class="ms-6"></div><div class="ms-7"></div><div class="ms-8"></div><div class="ms-9"></div><div class="ms-10"></div></div>
+<div class="contact-layout">
+  <div class="reveal">
+    <div class="section-label">Contact</div>
+    <h2>We'd love to hear from you.</h2>
+    <p>Connect Guernsey is a community built on genuine human connection. Whether you want to join, partner with us, or simply learn more — reach out and we'll get back to you promptly.</p>
+    <div class="contact-detail"><div class="cd-icon">✉️</div><div class="cd-info"><h4>Email</h4><p id="contactEmail">hello@connectguernsey.gg</p></div></div>
+    <div class="contact-detail"><div class="cd-icon">📍</div><div class="cd-info"><h4>Location</h4><p>Guernsey, Channel Islands</p></div></div>
+    <div class="contact-detail"><div class="cd-icon">🕐</div><div class="cd-info"><h4>Response Time</h4><p>We aim to respond within 2 business days</p></div></div>
+    <div class="contact-socials">
+      <a class="social-btn" id="socialLinkedIn" href="#" target="_blank" title="LinkedIn">in</a>
+      <a class="social-btn" id="socialFacebook" href="#" target="_blank" title="Facebook">f</a>
+    </div>
+    <div style="margin-top:3rem;background:var(--navy);padding:2rem">
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:white;margin-bottom:.75rem">Ready to join?</h4>
+      <p style="font-size:.84rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:1.25rem">Register your membership interest and be part of Connect Guernsey from day one.</p>
+      <a href="/membership.html#register" class="btn btn-gold">Register as a Member</a>
+    </div>
+  </div>
+  <div class="contact-form-box reveal">
+    <h3>Send us a message</h3>
+    <div id="contactAlert"></div>
+    <div style="margin-bottom:1.5rem">
+      <div style="font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">I'm interested in:</div>
+      <div class="interest-chips">
+        <button class="ic" onclick="selectInterest(this,'Membership')">Membership</button>
+        <button class="ic" onclick="selectInterest(this,'Partnership')">Partnership</button>
+        <button class="ic" onclick="selectInterest(this,'Sponsorship')">Sponsorship</button>
+        <button class="ic" onclick="selectInterest(this,'Speaking')">Speaking</button>
+        <button class="ic" onclick="selectInterest(this,'General Enquiry')">General Enquiry</button>
+      </div>
+    </div>
+    <form id="contactForm">
+      <input type="hidden" id="selectedInterest" value="General Enquiry">
+      <div class="form-row">
+        <div class="form-group"><label>First Name *</label><input type="text" id="cFirst" required placeholder="First name"></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="cLast" required placeholder="Last name"></div>
+      </div>
+      <div class="form-group"><label>Email Address *</label><input type="email" id="cEmail" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Industry</label><input type="text" id="cIndustry" placeholder="Your industry or sector"></div>
+      <div class="form-group"><label>Message *</label><textarea id="cMessage" required placeholder="Tell us what's on your mind..." style="height:140px"></textarea></div>
+      <button type="submit" class="btn btn-navy" id="cBtn">Send Message</button>
+    </form>
+  </div>
+</div>
+<footer></footer>
+<script src="/assets/js/api.js"></script>
+<script>
+function selectInterest(btn,val){
+  document.querySelectorAll('.ic').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  document.getElementById('selectedInterest').value=val;
+}
+document.getElementById('contactForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('cBtn');btn.textContent='Sending...';btn.disabled=true;
+  try{
+    await api.post('/api/enquiries/',{
+      first_name:document.getElementById('cFirst').value,
+      last_name:document.getElementById('cLast').value,
+      email:document.getElementById('cEmail').value,
+      interest:document.getElementById('selectedInterest').value,
+      industry:document.getElementById('cIndustry').value,
+      message:document.getElementById('cMessage').value
+    });
+    showAlert('contactAlert','✓ Message sent! We\'ll be in touch within 2 business days.','success');
+    e.target.reset();document.querySelectorAll('.ic').forEach(b=>b.classList.remove('sel'));
+  }catch(err){showAlert('contactAlert',err.message,'error');}
+  btn.textContent='Send Message';btn.disabled=false;
+});
+document.addEventListener('DOMContentLoaded',async()=>{
+  buildNav('contact');
+  await loadContent();fillAll();
+  const s=await loadSettings();
+  if(s.site_email)document.getElementById('contactEmail').textContent=s.site_email;
+  if(s.social_linkedin){document.getElementById('socialLinkedIn').href=s.social_linkedin;}
+  if(s.social_facebook){document.getElementById('socialFacebook').href=s.social_facebook;}
+});
+</script>
+</body>
+</html>

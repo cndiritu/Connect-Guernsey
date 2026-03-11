@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Page Content — Connect Guernsey Admin</title>
+<link rel="stylesheet" href="/admin/assets/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+  <div class="sidebar" id="sidebar"></div>
+  <div class="main-content">
+    <div class="top-bar"><div class="page-title">Page Content</div><div class="top-actions"><button class="btn btn-gold" onclick="saveAll()" id="saveAllBtn">Save All Changes</button></div></div>
+    <div class="page-body">
+      <div class="alert alert-info" style="background:#e8eef7;border-color:#1B4F8A;color:#1B4F8A;margin-bottom:1.5rem">Edit the text content for each section of your website. Click <strong>Save All Changes</strong> when you're done. Changes go live immediately.</div>
+      <div id="pagesAlert"></div>
+      <div id="sectionsContainer"></div>
+    </div>
+  </div>
+</div>
+<script src="/admin/assets/admin.js"></script>
+<script>
+if(!requireAuth())throw '';
+buildSidebar('pages');
+let allContent={};
+const SECTION_LABELS={'home':'🏠 Home Page','about':'📖 About Page','membership':'👥 Membership Page','partners':'🤝 Partners Page','contact':'✉️ Contact Page'};
+const FIELD_LABELS={
+  'home.hero.subtitle':'Hero Subtitle','home.mission.title':'Mission Title','home.mission.body':'Mission Body (Paragraph 1)','home.mission.body2':'Mission Body (Paragraph 2)',
+  'home.community.title':'Community Section Title','home.community.body':'Community Section Body','home.cta.body':'CTA Body Text',
+  'about.mission.body':'Mission Statement','about.vision.body':'Vision Statement',
+  'membership.hero.title':'Page Title','membership.why.body':'Why Join Body',
+  'partners.hero.title':'Page Title','partners.hero.body':'Intro Text',
+  'contact.hero.title':'Page Title','contact.hero.body':'Intro Text'
+};
+async function loadContent(){
+  try{
+    const data=await adminApi.get('/api/content/');
+    allContent={};
+    data.blocks.forEach(b=>{allContent[b.key]=b.value;});
+    const sections={};
+    Object.keys(FIELD_LABELS).forEach(key=>{
+      const sec=key.split('.')[0];
+      sections[sec]=sections[sec]||[];
+      sections[sec].push(key);
+    });
+    document.getElementById('sectionsContainer').innerHTML=Object.entries(sections).map(([sec,keys])=>`
+      <div class="card" style="margin-bottom:1.5rem">
+        <div class="card-header"><span class="card-title">${SECTION_LABELS[sec]||sec}</span></div>
+        <div class="card-body">
+          ${keys.map(key=>`
+            <div class="form-group">
+              <label>${FIELD_LABELS[key]||key}</label>
+              ${key.includes('.body')||key.includes('.subtitle')?
+                `<textarea id="content_${key.replace(/\./g,'_')}" style="height:100px">${escHtml(allContent[key]||'')}</textarea>`:
+                `<input type="text" id="content_${key.replace(/\./g,'_')}" value="${escHtml(allContent[key]||'')}"`+'>'
+              }
+            </div>`).join('')}
+        </div>
+      </div>`).join('');
+  }catch(e){showAlert('pagesAlert','Failed to load content: '+e.message,'error');}
+}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+async function saveAll(){
+  const btn=document.getElementById('saveAllBtn');btn.textContent='Saving...';btn.disabled=true;
+  try{
+    const promises=Object.keys(FIELD_LABELS).map(key=>{
+      const el=document.getElementById('content_'+key.replace(/\./g,'_'));
+      if(!el)return Promise.resolve();
+      return adminApi.put(`/api/content/${key}`,{value:el.value});
+    });
+    await Promise.all(promises);
+    showAlert('pagesAlert','✓ All content saved successfully!','success');
+  }catch(e){showAlert('pagesAlert','Error saving: '+e.message,'error');}
+  btn.textContent='Save All Changes';btn.disabled=false;
+}
+loadContent();
+</script>
+</body>
+</html>
