@@ -1,4 +1,4 @@
-const API_BASE = window.API_BASE || 'http://localhost:8000';
+const API_BASE = window.API_BASE || 'https://connect-guernsey.onrender.com';
 
 const api = {
   async get(path) {
