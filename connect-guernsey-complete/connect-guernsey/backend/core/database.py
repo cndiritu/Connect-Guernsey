@@ -1,8 +1,11 @@
+import os
 from supabase import create_client, Client
-from core.config import get_settings
-from functools import lru_cache
 
-@lru_cache()
+def get_client() -> Client:
+    url = os.getenv("SUPABASE_URL", "")
+    key = os.getenv("SUPABASE_SERVICE_KEY", "")
+    return create_client(url, key)
+
+# Also expose as supabase for any code that imports it directly
 def get_supabase() -> Client:
-    s = get_settings()
-    return create_client(s.SUPABASE_URL, s.SUPABASE_SERVICE_KEY)
+    return get_client()
