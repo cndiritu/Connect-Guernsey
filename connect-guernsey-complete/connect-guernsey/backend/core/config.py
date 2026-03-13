@@ -14,3 +14,11 @@ class Settings:
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "production")
 
 settings = Settings()
+
+# Support both import styles used across routers
+def get_settings() -> Settings:
+    return settings
+
+def get_client():
+    from supabase import create_client
+    return create_client(settings.SUPABASE_URL, settings.SUPABASE_SERVICE_KEY)
