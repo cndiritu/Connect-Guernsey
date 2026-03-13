@@ -1,4 +1,4 @@
-const API_BASE = window.API_BASE || 'https://connect-guernsey.onrender.com';
+const API_BASE = '';
 let _token = localStorage.getItem('cg_token');
 let _admin = JSON.parse(localStorage.getItem('cg_admin')||'null');
 

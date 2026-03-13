@@ -1,0 +1,7 @@
+{
+  "name": "connect-guernsey",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.47.0"
+  }
+}

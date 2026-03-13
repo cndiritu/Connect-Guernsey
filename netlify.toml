@@ -1,6 +1,90 @@
 [build]
   publish = "connect-guernsey-complete/connect-guernsey/frontend/public"
 
+[functions]
+  directory = "netlify/functions"
+
+# API redirects — map old API paths to Netlify Functions
+[[redirects]]
+  from = "/api/content/public"
+  to = "/.netlify/functions/content-public"
+  status = 200
+
+[[redirects]]
+  from = "/api/events/public"
+  to = "/.netlify/functions/events-public"
+  status = 200
+
+[[redirects]]
+  from = "/api/events/rsvp"
+  to = "/.netlify/functions/events-rsvp"
+  status = 200
+
+[[redirects]]
+  from = "/api/events/detail"
+  to = "/.netlify/functions/event-detail"
+  status = 200
+
+[[redirects]]
+  from = "/api/team/public"
+  to = "/.netlify/functions/team-public"
+  status = 200
+
+[[redirects]]
+  from = "/api/partners/public"
+  to = "/.netlify/functions/partners-public"
+  status = 200
+
+[[redirects]]
+  from = "/api/blog/public/:slug"
+  to = "/.netlify/functions/blog-post?slug=:slug"
+  status = 200
+
+[[redirects]]
+  from = "/api/blog/public"
+  to = "/.netlify/functions/blog-public"
+  status = 200
+
+[[redirects]]
+  from = "/api/blog/post"
+  to = "/.netlify/functions/blog-post"
+  status = 200
+
+[[redirects]]
+  from = "/api/gallery/public"
+  to = "/.netlify/functions/gallery-public"
+  status = 200
+
+[[redirects]]
+  from = "/api/settings/public"
+  to = "/.netlify/functions/settings-public"
+  status = 200
+
+[[redirects]]
+  from = "/api/members/register"
+  to = "/.netlify/functions/members-register"
+  status = 200
+
+[[redirects]]
+  from = "/api/members/"
+  to = "/.netlify/functions/members-list"
+  status = 200
+
+[[redirects]]
+  from = "/api/members"
+  to = "/.netlify/functions/members-list"
+  status = 200
+
+[[redirects]]
+  from = "/api/enquiries/"
+  to = "/.netlify/functions/enquiries-submit"
+  status = 200
+
+[[redirects]]
+  from = "/api/enquiries"
+  to = "/.netlify/functions/enquiries-submit"
+  status = 200
+
 [[redirects]]
   from = "/admin"
   to = "/admin/index.html"
