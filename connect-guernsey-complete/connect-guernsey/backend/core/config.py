@@ -13,9 +13,28 @@ class Settings:
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "https://connectguernsey.com")
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "production")
 
+    # Lowercase aliases so all routers work
+    @property
+    def admin_email(self): return self.ADMIN_EMAIL
+    @property
+    def admin_password(self): return self.ADMIN_PASSWORD
+    @property
+    def supabase_url(self): return self.SUPABASE_URL
+    @property
+    def supabase_service_key(self): return self.SUPABASE_SERVICE_KEY
+    @property
+    def jwt_secret(self): return self.JWT_SECRET
+    @property
+    def jwt_algorithm(self): return self.JWT_ALGORITHM
+    @property
+    def resend_api_key(self): return self.RESEND_API_KEY
+    @property
+    def email_from(self): return self.EMAIL_FROM
+    @property
+    def frontend_url(self): return self.FRONTEND_URL
+
 settings = Settings()
 
-# Support both import styles used across routers
 def get_settings() -> Settings:
     return settings
 
