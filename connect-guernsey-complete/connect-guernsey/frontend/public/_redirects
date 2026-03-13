@@ -1,0 +1,4 @@
+/admin/assets/* /admin/assets/:splat 200
+/admin/* /admin/:splat 200
+/assets/* /assets/:splat 200
+/* /:splat 200
