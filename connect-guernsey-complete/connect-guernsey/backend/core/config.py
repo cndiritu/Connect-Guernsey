@@ -1,23 +1,16 @@
-from pydantic_settings import BaseSettings
-from functools import lru_cache
+import os
 
-class Settings(BaseSettings):
-    APP_NAME: str = "Connect Guernsey"
-    ENVIRONMENT: str = "development"
-    FRONTEND_URL: str = "http://localhost:8080"
-    SUPABASE_URL: str = ""
-    SUPABASE_SERVICE_KEY: str = ""
-    JWT_SECRET: str = "dev-secret-change-in-production"
+class Settings:
+    SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
+    SUPABASE_SERVICE_KEY: str = os.getenv("SUPABASE_SERVICE_KEY", "")
+    JWT_SECRET: str = os.getenv("JWT_SECRET", "changeme")
     JWT_ALGORITHM: str = "HS256"
-    JWT_EXPIRE_MINUTES: int = 480
-    ADMIN_EMAIL: str = "admin@connectguernsey.gg"
-    ADMIN_PASSWORD: str = "Admin123!"
-    RESEND_API_KEY: str = ""
-    EMAIL_FROM: str = "hello@connectguernsey.gg"
+    JWT_EXPIRE_HOURS: int = 24
+    ADMIN_EMAIL: str = os.getenv("ADMIN_EMAIL", "admin@connectguernsey.com")
+    ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "changeme")
+    RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
+    EMAIL_FROM: str = os.getenv("EMAIL_FROM", "hello@connectguernsey.com")
+    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "https://connectguernsey.com")
+    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "production")
 
-    class Config:
-        env_file = ".env"
-
-@lru_cache()
-def get_settings():
-    return Settings()
+settings = Settings()
