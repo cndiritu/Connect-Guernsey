@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dashboard — Connect Guernsey Admin</title>
+<link rel="stylesheet" href="/admin/assets/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+  <div class="sidebar" id="sidebar"></div>
+  <div class="main-content">
+    <div class="top-bar"><div class="page-title">Dashboard</div><div class="top-actions"><span id="dateDisplay" style="font-size:.78rem;color:#888"></span></div></div>
+    <div class="page-body">
+      <div class="stat-cards">
+        <div class="stat-card"><div class="stat-label">Total Members</div><div class="stat-value" id="statTotal">—</div><div class="stat-sub" id="statPending">— pending review</div></div>
+        <div class="stat-card"><div class="stat-label">Approved Members</div><div class="stat-value" id="statApproved">—</div><div class="stat-sub">Active members</div></div>
+        <div class="stat-card"><div class="stat-label">Upcoming Events</div><div class="stat-value" id="statEvents">—</div><div class="stat-sub">Published &amp; scheduled</div></div>
+        <div class="stat-card"><div class="stat-label">Unread Enquiries</div><div class="stat-value" id="statEnquiries">—</div><div class="stat-sub">Awaiting response</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:1.5rem">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Recent Member Applications</span><a href="/admin/members.html" class="btn btn-ghost btn-sm">View All</a></div>
+          <div class="card-body"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Industry</th><th>Status</th><th>Date</th><th></th></tr></thead><tbody id="recentMembers"><tr><td colspan="6" style="color:#aaa;font-size:.82rem">Loading...</td></tr></tbody></table></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Recent Enquiries</span><a href="/admin/enquiries.html" class="btn btn-ghost btn-sm">View All</a></div>
+          <div class="card-body"><div id="recentEnquiries" style="display:flex;flex-direction:column;gap:.75rem"></div></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1.5rem">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Upcoming Events</span><a href="/admin/events.html" class="btn btn-ghost btn-sm">Manage</a></div>
+          <div class="card-body"><div id="upcomingEvents" style="display:flex;flex-direction:column;gap:.75rem"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Quick Actions</span></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:.75rem">
+            <a href="/admin/members.html?filter=pending" class="btn btn-gold" style="text-align:center">Review Pending Members</a>
+            <a href="/admin/events.html?action=new" class="btn btn-navy" style="text-align:center">Create New Event</a>
+            <a href="/admin/blog.html?action=new" class="btn btn-navy" style="text-align:center">Write Blog Post</a>
+            <a href="/admin/enquiries.html" class="btn btn-ghost" style="text-align:center">View Enquiries</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/admin/assets/admin.js"></script>
+<script>
+if(!requireAuth())throw '';
+buildSidebar('dashboard');
+document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+async function loadDash(){
+  try{
+    const[mStats,events,enquiries]=await Promise.all([
+      adminApi.get('/api/members/stats'),
+      adminApi.get('/api/events/'),
+      adminApi.get('/api/enquiries/')
+    ]);
+    document.getElementById('statTotal').textContent=mStats.total||0;
+    document.getElementById('statPending').textContent=`${mStats.pending||0} pending review`;
+    document.getElementById('statApproved').textContent=mStats.approved||0;
+    const upcoming=events.events?.filter(e=>new Date(e.event_date)>=new Date()&&e.is_published)||[];
+    document.getElementById('statEvents').textContent=upcoming.length;
+    document.getElementById('statEnquiries').textContent=enquiries.unread||0;
+    const members=await adminApi.get('/api/members/?limit=5');
+    document.getElementById('recentMembers').innerHTML=members.members?.map(m=>`
+      <tr><td>${m.first_name} ${m.last_name}</td><td style="color:#888;font-size:.78rem">${m.email}</td><td style="font-size:.78rem">${m.industry||'—'}</td>
+      <td><span class="badge badge-${m.status==='approved'?'green':m.status==='pending'?'amber':'red'}">${m.status}</span></td>
+      <td style="font-size:.75rem;color:#aaa">${formatDate(m.created_at)}</td>
+      <td><a href="/admin/members.html" class="btn btn-ghost btn-sm">View</a></td></tr>`).join('')||'<tr><td colspan="6" style="color:#aaa">No members yet</td></tr>';
+    document.getElementById('recentEnquiries').innerHTML=enquiries.enquiries?.slice(0,4).map(e=>`
+      <div style="padding:.75rem;background:${e.status==='unread'?'#fff8e6':'#f8f8f8'};border-left:3px solid ${e.status==='unread'?'var(--gold)':'#ddd'}">
+        <div style="font-size:.82rem;font-weight:500">${e.first_name} ${e.last_name}</div>
+        <div style="font-size:.75rem;color:#888;margin:.2rem 0">${e.interest} · ${formatDate(e.created_at)}</div>
+        <div style="font-size:.78rem;color:#555">${e.message.substring(0,80)}...</div>
+      </div>`).join('')||'<p style="color:#aaa;font-size:.82rem">No enquiries yet</p>';
+    document.getElementById('upcomingEvents').innerHTML=upcoming.slice(0,4).map(e=>`
+      <div style="display:flex;gap:1rem;align-items:center;padding:.5rem 0;border-bottom:1px solid rgba(0,0,0,.05)">
+        <div style="text-align:center;min-width:50px"><div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold);line-height:1">${new Date(e.event_date).getDate()}</div><div style="font-size:.6rem;color:#aaa;letter-spacing:.1em;text-transform:uppercase">${new Date(e.event_date).toLocaleDateString('en-GB',{month:'short'})}</div></div>
+        <div><div style="font-size:.86rem;font-weight:500">${e.title}</div><div style="font-size:.75rem;color:#888">${e.location}</div></div>
+      </div>`).join('')||'<p style="color:#aaa;font-size:.82rem">No upcoming events</p>';
+  }catch(e){console.error(e);}
+}
+loadDash();
+</script>
+</body>
+</html>

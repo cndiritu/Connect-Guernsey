@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Gallery — Connect Guernsey</title>
+<link rel="stylesheet" href="/assets/css/main.css">
+<style>
+.gallery-main{padding:4rem 6rem;background:var(--cream);}
+.albums-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.album-card{background:white;overflow:hidden;cursor:pointer;transition:transform .25s,box-shadow .25s;}
+.album-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.1);}
+.album-cover{height:220px;background:var(--navy);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.album-cover img{width:100%;height:100%;object-fit:cover;}
+.album-cover-placeholder{font-size:3rem;opacity:.2;}
+.album-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,15,30,.8),transparent);display:flex;align-items:flex-end;padding:1.5rem;}
+.album-count{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6);background:rgba(0,0,0,.3);padding:.3rem .7rem;border-radius:100px;}
+.album-info{padding:1.5rem;}
+.album-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--navy);margin-bottom:.25rem;}
+.album-desc{font-size:.8rem;color:var(--muted);line-height:1.6;}
+/* Photo lightbox view */
+.album-view{display:none;padding:3rem 6rem;background:var(--cream);}
+.album-view.active{display:block;}
+.album-view-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:2.5rem;}
+.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.photo-item{aspect-ratio:1;overflow:hidden;cursor:pointer;position:relative;}
+.photo-item img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
+.photo-item:hover img{transform:scale(1.05);}
+/* Lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:2000;display:none;align-items:center;justify-content:center;flex-direction:column;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:90vw;max-height:80vh;object-fit:contain;}
+.lightbox-close{position:absolute;top:1.5rem;right:2rem;background:none;border:none;color:white;font-size:2rem;cursor:pointer;}
+.lightbox-nav{display:flex;gap:2rem;margin-top:1.5rem;}
+.lb-nav-btn{background:rgba(255,255,255,.1);border:none;color:white;padding:.75rem 2rem;cursor:pointer;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;transition:background .2s;}
+.lb-nav-btn:hover{background:rgba(255,255,255,.2);}
+.lightbox-caption{color:rgba(255,255,255,.5);font-size:.82rem;margin-top:.75rem;}
+@media(max-width:1024px){
+  .gallery-main,.album-view{padding:2rem;}.albums-grid{grid-template-columns:1fr;}
+  .photo-grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+<nav id="nav"></nav>
+<div id="mobile-nav" class="nav-mobile"></div>
+<div class="page-hero">
+  <div class="section-label center">Moments &amp; Memories</div>
+  <h1>Gallery</h1>
+  <p>Photos from Connect Guernsey events, gatherings and milestones.</p>
+</div>
+<div class="mosaic-strip"><div class="ms-1"></div><div class="ms-2"></div><div class="ms-3"></div><div class="ms-4"></div><div class="ms-5"></div><div class="ms-6"></div><div class="ms-7"></div><div class="ms-8"></div><div class="ms-9"></div><div class="ms-10"></div></div>
+<div class="gallery-main" id="galleryMain">
+  <div class="section-label">Photo Albums</div>
+  <h2 class="section-title" style="margin-bottom:2.5rem">Event Gallery</h2>
+  <div class="albums-grid" id="albumsGrid">
+    <div style="grid-column:1/-1;color:var(--muted);font-size:.88rem;padding:2rem 0">Gallery albums will appear here after our launch events. Check back after May 2026!</div>
+  </div>
+</div>
+<div class="album-view" id="albumView">
+  <div class="album-view-header">
+    <button onclick="backToGallery()" style="background:none;border:none;cursor:pointer;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.5rem">← All Albums</button>
+    <div><h2 id="albumTitle" style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--navy)"></h2><p id="albumDesc" style="color:var(--muted);font-size:.88rem;margin-top:.25rem"></p></div>
+  </div>
+  <div class="photo-grid" id="photoGrid"></div>
+</div>
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <img id="lbImg" src="" alt="">
+  <div class="lightbox-caption" id="lbCaption"></div>
+  <div class="lightbox-nav">
+    <button class="lb-nav-btn" onclick="lbNav(-1)">← Previous</button>
+    <button class="lb-nav-btn" onclick="lbNav(1)">Next →</button>
+  </div>
+</div>
+<footer></footer>
+<script src="/assets/js/api.js"></script>
+<script>
+let currentPhotos=[],currentPhotoIdx=0;
+function openLightbox(photos,idx){
+  currentPhotos=photos;currentPhotoIdx=idx;
+  document.getElementById('lbImg').src=photos[idx].image_url;
+  document.getElementById('lbCaption').textContent=photos[idx].caption||'';
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+function lbNav(dir){
+  currentPhotoIdx=(currentPhotoIdx+dir+currentPhotos.length)%currentPhotos.length;
+  document.getElementById('lbImg').src=currentPhotos[currentPhotoIdx].image_url;
+  document.getElementById('lbCaption').textContent=currentPhotos[currentPhotoIdx].caption||'';
+}
+function viewAlbum(album){
+  document.getElementById('galleryMain').style.display='none';
+  document.getElementById('albumView').classList.add('active');
+  document.getElementById('albumTitle').textContent=album.title;
+  document.getElementById('albumDesc').textContent=album.description||'';
+  const photos=album.photos||[];
+  document.getElementById('photoGrid').innerHTML=photos.length
+    ?photos.map((p,i)=>`<div class="photo-item" onclick="openLightbox(${JSON.stringify(photos).replace(/"/g,'&quot;')},${i})"><img src="${p.image_url}" alt="${p.caption||''}"></div>`).join('')
+    :'<div style="color:var(--muted);font-size:.88rem;padding:2rem;grid-column:1/-1">No photos in this album yet.</div>';
+}
+function backToGallery(){
+  document.getElementById('galleryMain').style.display='block';
+  document.getElementById('albumView').classList.remove('active');
+}
+async function loadGallery(){
+  try{
+    const{albums}=await api.get('/api/gallery/public');
+    if(!albums||!albums.length)return;
+    document.getElementById('albumsGrid').innerHTML=albums.map(a=>`
+      <div class="album-card reveal" onclick='viewAlbum(${JSON.stringify(a).replace(/'/g,"&#39;")})'>
+        <div class="album-cover">${a.cover_image_url?`<img src="${a.cover_image_url}" alt="${a.title}">`:`<div class="album-cover-placeholder">📷</div>`}<div class="album-overlay"><span class="album-count">${(a.photos||[]).length} photos</span></div></div>
+        <div class="album-info"><div class="album-title">${a.title}</div>${a.description?`<div class="album-desc">${a.description}</div>`:''}</div>
+      </div>`).join('');
+    initReveal();
+  }catch(e){}
+}
+window.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeLightbox();
+  if(e.key==='ArrowLeft')lbNav(-1);
+  if(e.key==='ArrowRight')lbNav(1);
+});
+document.addEventListener('DOMContentLoaded',async()=>{buildNav('gallery');await loadContent();fillAll();loadGallery();});
+</script>
+</body>
+</html>

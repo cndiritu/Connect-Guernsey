@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Membership — Connect Guernsey</title>
+<link rel="stylesheet" href="/assets/css/main.css">
+<style>
+.benefits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
+.benefit-card{background:white;padding:2.5rem;border-top:3px solid var(--gold);transition:transform .25s,box-shadow .25s;}
+.benefit-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.08);}
+.benefit-icon{font-size:2rem;margin-bottom:1.25rem;}
+.benefit-card h3{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--navy);margin-bottom:.75rem;}
+.benefit-card p{font-size:.86rem;color:var(--muted);line-height:1.75;font-weight:300;}
+.register-section{background:var(--navy);padding:6rem;}
+.register-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start;}
+.register-info h2{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:white;margin-bottom:1.5rem;}
+.register-info p{color:rgba(255,255,255,.6);line-height:1.8;font-weight:300;margin-bottom:1rem;}
+.register-form{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:3rem;}
+.register-form h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:white;margin-bottom:2rem;}
+.form-group label{color:rgba(255,255,255,.5);}
+.form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:white;}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(255,255,255,.25);}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold);}
+.form-group select option{background:var(--navy);color:white;}
+.directory-section{padding:6rem;background:var(--cream);}
+.member-card{background:white;padding:1.75rem;text-align:center;transition:transform .25s;cursor:default;}
+.member-card:hover{transform:translateY(-3px);}
+.member-av{width:72px;height:72px;border-radius:50%;margin:0 auto .75rem;overflow:hidden;background:var(--navy);display:flex;align-items:center;justify-content:center;}
+.member-av img{width:100%;height:100%;object-fit:cover;}
+.member-init{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold);}
+.member-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--navy);}
+.member-co{font-size:.72rem;color:var(--muted);margin-top:.2rem;}
+.member-industry{display:inline-block;margin-top:.5rem;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:100px;background:rgba(13,31,60,.07);color:var(--navy);}
+@media(max-width:1024px){
+  .benefits-grid{grid-template-columns:1fr;}.register-section{padding:4rem 2rem;}
+  .register-grid{grid-template-columns:1fr;gap:3rem;}.directory-section{padding:4rem 2rem;}
+}
+</style>
+</head>
+<body>
+<nav id="nav"></nav>
+<div id="mobile-nav" class="nav-mobile"></div>
+<div class="page-hero">
+  <div class="section-label center">Join Us</div>
+  <h1 data-content="membership.hero.title">Become a Member</h1>
+  <p data-content="membership.why.body">Membership of Connect Guernsey gives you access to a growing network of professionals across every major industry on the island.</p>
+</div>
+<div class="mosaic-strip"><div class="ms-1"></div><div class="ms-2"></div><div class="ms-3"></div><div class="ms-4"></div><div class="ms-5"></div><div class="ms-6"></div><div class="ms-7"></div><div class="ms-8"></div><div class="ms-9"></div><div class="ms-10"></div></div>
+<section style="padding:6rem;background:var(--cream)">
+  <div class="reveal text-center" style="max-width:680px;margin:0 auto 1rem">
+    <div class="section-label center">Member Benefits</div>
+    <h2 class="section-title">Why Join Connect Guernsey?</h2>
+    <p style="color:var(--muted);line-height:1.8;margin-top:1rem;font-weight:300">Membership puts you at the heart of Guernsey's professional community — with access to events, mentorship, and a network that grows with you.</p>
+  </div>
+  <div class="benefits-grid reveal">
+    <div class="benefit-card"><div class="benefit-icon">🎟️</div><h3>Exclusive Events</h3><p>Priority access to member-only events and early booking for all Connect Guernsey gatherings — from intimate networking evenings to major speaker events.</p></div>
+    <div class="benefit-card"><div class="benefit-icon">🤝</div><h3>Professional Network</h3><p>Connect directly with professionals across finance, law, tech, entrepreneurship and beyond — all based on the island and committed to Guernsey's future.</p></div>
+    <div class="benefit-card"><div class="benefit-icon">🌱</div><h3>Mentorship Access</h3><p>Give and receive mentorship within a community of people who understand the unique professional landscape of island life.</p></div>
+    <div class="benefit-card"><div class="benefit-icon">📚</div><h3>Knowledge &amp; Insight</h3><p>Access to seminars, talks and workshops delivered by industry leaders — covering everything from investment and entrepreneurship to career development.</p></div>
+    <div class="benefit-card"><div class="benefit-icon">🌐</div><h3>Members Directory</h3><p>Opt-in listing in the Connect Guernsey members directory — making it easy for fellow members to find and reach out to you.</p></div>
+    <div class="benefit-card"><div class="benefit-icon">🚀</div><h3>Entrepreneurship Support</h3><p>Special programming and connections for entrepreneurs and founders — including collaboration with Innovate Guernsey and access to investor networks.</p></div>
+  </div>
+</section>
+<section class="register-section" id="register">
+  <div class="register-grid">
+    <div class="register-info reveal">
+      <div class="section-label" style="color:var(--gold)">Get Started</div>
+      <h2>Register Your Interest</h2>
+      <p>Fill in the form to register as a member of Connect Guernsey. We'll review your application and be in touch shortly.</p>
+      <p>Membership is open to all professionals working in or connected to Guernsey — regardless of industry, background or how long you've been on the island.</p>
+      <div style="margin-top:2rem;padding:1.5rem;background:rgba(255,255,255,.04);border-left:3px solid var(--gold)">
+        <p style="color:rgba(255,255,255,.5);font-size:.85rem;line-height:1.7"><strong style="color:var(--gold)">Launching May 2026</strong><br>We're currently building our membership ahead of the official launch. Register now to be part of the community from day one.</p>
+      </div>
+    </div>
+    <div class="register-form reveal">
+      <h3>Membership Application</h3>
+      <div id="formAlert"></div>
+      <form id="regForm">
+        <div class="form-row">
+          <div class="form-group"><label>First Name *</label><input type="text" name="first_name" required placeholder="Your first name"></div>
+          <div class="form-group"><label>Last Name *</label><input type="text" name="last_name" required placeholder="Your last name"></div>
+        </div>
+        <div class="form-group"><label>Email Address *</label><input type="email" name="email" required placeholder="your@email.com"></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" name="phone" placeholder="+44 1481..."></div>
+        <div class="form-group"><label>Company / Organisation</label><input type="text" name="company" placeholder="Where do you work?"></div>
+        <div class="form-group"><label>Industry</label>
+          <select name="industry">
+            <option value="">Select your industry</option>
+            <option>Finance &amp; Banking</option><option>Law &amp; Legal Services</option><option>Technology</option>
+            <option>Insurance</option><option>Real Estate</option><option>Accountancy</option>
+            <option>Entrepreneurship / Startup</option><option>Healthcare</option><option>Education</option>
+            <option>Creative Industries</option><option>Hospitality &amp; Tourism</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>LinkedIn Profile</label><input type="url" name="linkedin_url" placeholder="https://linkedin.com/in/..."></div>
+        <div class="form-group"><label>Tell us about yourself</label><textarea name="bio" placeholder="A brief introduction — your background, what you do, and what you're hoping to get from Connect Guernsey."></textarea></div>
+        <button type="submit" class="btn btn-gold" style="width:100%;margin-top:.5rem" id="submitBtn">Submit Application</button>
+      </form>
+    </div>
+  </div>
+</section>
+<section class="directory-section">
+  <div class="reveal" style="margin-bottom:3rem">
+    <div class="section-label">Member Directory</div>
+    <h2 class="section-title">Our Members</h2>
+    <p style="color:var(--muted);font-size:.92rem;line-height:1.8;margin-top:1rem;font-weight:300;max-width:580px">Browse our growing community of professionals. Members listed here have opted in to the directory.</p>
+  </div>
+  <div class="grid-4" id="memberGrid"><div style="color:var(--muted);font-size:.88rem;padding:2rem 0;grid-column:1/-1">Members directory loading...</div></div>
+</section>
+<footer></footer>
+<script src="/assets/js/api.js"></script>
+<script>
+document.getElementById('regForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('submitBtn');
+  btn.textContent='Submitting...';btn.disabled=true;
+  const data={};
+  new FormData(e.target).forEach((v,k)=>{if(v)data[k]=v;});
+  try{
+    await api.post('/api/members/register',data);
+    showAlert('formAlert','✓ Thank you! Your application has been received. We\'ll be in touch shortly.','success');
+    e.target.reset();
+  }catch(err){showAlert('formAlert',err.message||'Something went wrong. Please try again.','error');}
+  btn.textContent='Submit Application';btn.disabled=false;
+});
+async function loadMembers(){
+  try{
+    const{members}=await api.get('/api/members/?status=approved&limit=20');
+    if(!members||!members.length){document.getElementById('memberGrid').innerHTML='<div style="color:var(--muted);font-size:.88rem;grid-column:1/-1">Members will appear here after our launch.</div>';return;}
+    document.getElementById('memberGrid').innerHTML=members.map(m=>`
+      <div class="member-card reveal">
+        <div class="member-av">${m.image_url?`<img src="${m.image_url}">`:`<span class="member-init">${m.first_name.charAt(0)}</span>`}</div>
+        <div class="member-name">${m.first_name} ${m.last_name}</div>
+        ${m.company?`<div class="member-co">${m.company}</div>`:''}
+        ${m.industry?`<span class="member-industry">${m.industry}</span>`:''}
+      </div>`).join('');
+    initReveal();
+  }catch(e){document.getElementById('memberGrid').innerHTML='<div style="color:var(--muted);font-size:.88rem;grid-column:1/-1">Members directory coming soon.</div>';}
+}
+document.addEventListener('DOMContentLoaded',async()=>{
+  buildNav('membership');await loadContent();fillAll();loadMembers();
+  if(location.hash==='#register')document.getElementById('register')?.scrollIntoView({behavior:'smooth'});
+});
+</script>
+</body>
+</html>

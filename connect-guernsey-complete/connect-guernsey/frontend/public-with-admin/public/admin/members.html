@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Members — Connect Guernsey Admin</title>
+<link rel="stylesheet" href="/admin/assets/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+  <div class="sidebar" id="sidebar"></div>
+  <div class="main-content">
+    <div class="top-bar"><div class="page-title">Members</div><div class="top-actions"><div id="memberStats" style="font-size:.78rem;color:#888"></div></div></div>
+    <div class="page-body">
+      <div class="card">
+        <div class="card-header" style="flex-wrap:wrap;gap:1rem">
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm filter-status active" onclick="setFilter('',this)">All</button>
+            <button class="btn btn-ghost btn-sm filter-status" onclick="setFilter('pending',this)">Pending</button>
+            <button class="btn btn-ghost btn-sm filter-status" onclick="setFilter('approved',this)">Approved</button>
+            <button class="btn btn-ghost btn-sm filter-status" onclick="setFilter('suspended',this)">Suspended</button>
+          </div>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <input type="text" id="searchInput" placeholder="Search members..." style="border:1px solid #ddd;padding:.45rem .8rem;font-size:.82rem;font-family:'DM Sans',sans-serif;outline:none;width:200px">
+            <button class="btn btn-gold btn-sm" onclick="loadMembers()">Search</button>
+          </div>
+        </div>
+        <div class="card-body"><div class="table-wrap"><table>
+          <thead><tr><th>Name</th><th>Email</th><th>Company</th><th>Industry</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+          <tbody id="membersTable"><tr><td colspan="7" style="color:#aaa">Loading...</td></tr></tbody>
+        </table></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Member Detail Modal -->
+<div class="modal-overlay" id="memberModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="modalMemberName">Member Detail</span><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div id="memberDetail"></div>
+      <div id="modalAlert"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+      <button class="btn btn-gold" id="modalApproveBtn" onclick="doApprove()">Approve</button>
+      <button class="btn btn-red" id="modalSuspendBtn" onclick="doSuspend()">Suspend</button>
+    </div>
+  </div>
+</div>
+<script src="/admin/assets/admin.js"></script>
+<script>
+if(!requireAuth())throw '';
+buildSidebar('members');
+let currentFilter='', currentMemberId='';
+function setFilter(val,btn){
+  currentFilter=val;
+  document.querySelectorAll('.filter-status').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  loadMembers();
+}
+async function loadMembers(){
+  const search=document.getElementById('searchInput').value;
+  let url=`/api/members/?limit=100`;
+  if(currentFilter)url+=`&status=${currentFilter}`;
+  if(search)url+=`&search=${encodeURIComponent(search)}`;
+  try{
+    const{members,count}=await adminApi.get(url);
+    document.getElementById('membersTable').innerHTML=members.map(m=>`
+      <tr>
+        <td><strong>${m.first_name} ${m.last_name}</strong></td>
+        <td style="color:#888;font-size:.8rem">${m.email}</td>
+        <td style="font-size:.82rem">${m.company||'—'}</td>
+        <td style="font-size:.82rem">${m.industry||'—'}</td>
+        <td><span class="badge badge-${m.status==='approved'?'green':m.status==='pending'?'amber':'red'}">${m.status}</span></td>
+        <td style="font-size:.75rem;color:#aaa">${formatDate(m.created_at)}</td>
+        <td style="display:flex;gap:.4rem">
+          <button class="btn btn-ghost btn-sm" onclick="viewMember('${m.id}','${m.first_name} ${m.last_name}')">View</button>
+          ${m.status==='pending'?`<button class="btn btn-gold btn-sm" onclick="quickApprove('${m.id}')">✓ Approve</button>`:''}
+        </td>
+      </tr>`).join('')||'<tr><td colspan="7" style="color:#aaa;font-size:.82rem">No members found</td></tr>';
+    const stats=await adminApi.get('/api/members/stats');
+    document.getElementById('memberStats').textContent=`Total: ${stats.total} · Pending: ${stats.pending} · Approved: ${stats.approved}`;
+  }catch(e){document.getElementById('membersTable').innerHTML=`<tr><td colspan="7" style="color:red;font-size:.82rem">${e.message}</td></tr>`;}
+}
+async function viewMember(id,name){
+  currentMemberId=id;
+  document.getElementById('modalMemberName').textContent=name;
+  try{
+    const m=await adminApi.get(`/api/members/${id}`);
+    document.getElementById('memberDetail').innerHTML=`
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+        <div><div style="font-size:.62rem;color:#aaa;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem">Email</div><div style="font-size:.88rem">${m.email}</div></div>
+        <div><div style="font-size:.62rem;color:#aaa;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem">Phone</div><div style="font-size:.88rem">${m.phone||'—'}</div></div>
+        <div><div style="font-size:.62rem;color:#aaa;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem">Company</div><div style="font-size:.88rem">${m.company||'—'}</div></div>
+        <div><div style="font-size:.62rem;color:#aaa;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem">Industry</div><div style="font-size:.88rem">${m.industry||'—'}</div></div>
+        <div><div style="font-size:.62rem;color:#aaa;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem">Status</div><span class="badge badge-${m.status==='approved'?'green':m.status==='pending'?'amber':'red'}">${m.status}</span></div>
+        <div><div style="font-size:.62rem;color:#aaa;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem">Joined</div><div style="font-size:.88rem">${formatDate(m.created_at)}</div></div>
+      </div>
+      ${m.linkedin_url?`<div style="margin-bottom:1rem"><a href="${m.linkedin_url}" target="_blank" style="font-size:.82rem;color:var(--navy)">LinkedIn Profile →</a></div>`:''}
+      ${m.bio?`<div><div style="font-size:.62rem;color:#aaa;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem">About</div><div style="font-size:.88rem;line-height:1.7;color:#555">${m.bio}</div></div>`:''}`;
+    const mb=document.getElementById('modalApproveBtn');
+    const ms=document.getElementById('modalSuspendBtn');
+    mb.style.display=m.status!=='approved'?'inline-block':'none';
+    ms.style.display=m.status!=='suspended'?'inline-block':'none';
+    document.getElementById('memberModal').classList.add('open');
+  }catch(e){alert('Failed to load member: '+e.message);}
+}
+async function doApprove(){
+  try{await adminApi.post(`/api/members/${currentMemberId}/approve`,{});showAlert('modalAlert','Member approved!');loadMembers();closeModal();}
+  catch(e){showAlert('modalAlert',e.message,'error');}
+}
+async function doSuspend(){
+  if(!window.confirm('Suspend this member?'))return;
+  try{await adminApi.post(`/api/members/${currentMemberId}/suspend`,{});showAlert('modalAlert','Member suspended.');loadMembers();closeModal();}
+  catch(e){showAlert('modalAlert',e.message,'error');}
+}
+async function quickApprove(id){
+  try{await adminApi.post(`/api/members/${id}/approve`,{});loadMembers();}
+  catch(e){alert(e.message);}
+}
+function closeModal(){document.getElementById('memberModal').classList.remove('open');}
+document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')loadMembers();});
+loadMembers();
+const params=new URLSearchParams(location.search);
+if(params.get('filter')==='pending'){setFilter('pending',document.querySelector('.filter-status:nth-child(2)'));}
+</script>
+</body>
+</html>

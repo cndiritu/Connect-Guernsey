@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin Login — Connect Guernsey</title>
+<link rel="stylesheet" href="/admin/assets/admin.css">
+</head>
+<body>
+<div class="login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      <div style="width:50px;height:50px;background:#c9a84c;transform:rotate(45deg);margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;">
+        <span style="transform:rotate(-45deg);font-family:'Cormorant Garamond',serif;font-weight:700;color:#060f1e;font-size:1rem">CG</span>
+      </div>
+      <h1>Connect Guernsey</h1>
+      <p>Admin Portal</p>
+    </div>
+    <div id="loginError" style="color:#8B2635;font-size:.82rem;margin-bottom:.75rem;min-height:1.2rem;text-align:center"></div>
+    <div class="form-group"><label>Email Address</label><input type="email" id="email" required placeholder="admin@connectguernsey.com" autofocus></div>
+    <div class="form-group"><label>Password</label><input type="password" id="password" required placeholder="••••••••"></div>
+    <button class="btn btn-navy" style="width:100%;margin-top:.5rem;padding:.85rem;cursor:pointer" id="loginBtn" onclick="doLogin()">Sign In</button>
+    <div style="margin-top:2rem;text-align:center"><a href="/" style="font-size:.72rem;color:#aaa;letter-spacing:.08em">← Back to website</a></div>
+  </div>
+</div>
+<script>
+const API_BASE = 'https://connect-guernsey.onrender.com';
+if (localStorage.getItem('cg_token')) location.href = '/admin/dashboard.html';
+document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+async function doLogin() {
+  const btn = document.getElementById('loginBtn');
+  const err = document.getElementById('loginError');
+  btn.textContent = 'Signing in...'; btn.disabled = true; err.textContent = '';
+  try {
+    const r = await fetch(API_BASE + '/api/auth/login', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email: document.getElementById('email').value, password: document.getElementById('password').value})
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.detail || 'Invalid credentials');
+    localStorage.setItem('cg_token', data.access_token);
+    localStorage.setItem('cg_admin', JSON.stringify(data.admin || {name:'Admin'}));
+    location.href = '/admin/dashboard.html';
+  } catch(e) {
+    err.textContent = e.message || 'Login failed. Check your credentials.';
+    btn.textContent = 'Sign In'; btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>

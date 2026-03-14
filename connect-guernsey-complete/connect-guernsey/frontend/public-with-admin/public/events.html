@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Events — Connect Guernsey</title>
+<link rel="stylesheet" href="/assets/css/main.css">
+<style>
+.events-filter{padding:2rem 6rem;background:white;border-bottom:1px solid rgba(0,0,0,.06);display:flex;gap:1rem;flex-wrap:wrap;align-items:center;}
+.filter-btn{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;padding:.5rem 1.2rem;border:1px solid rgba(0,0,0,.15);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.filter-btn.active,.filter-btn:hover{background:var(--navy);color:white;border-color:var(--navy);}
+.events-main{padding:4rem 6rem;background:var(--cream);}
+.event-featured{background:var(--navy);display:grid;grid-template-columns:1fr 1.5fr;margin-bottom:3rem;overflow:hidden;}
+.ef-date{padding:3rem;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:var(--gold);min-width:180px;}
+.ef-day{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:var(--navy-deep);line-height:1;}
+.ef-month{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--navy-mid);margin-top:.25rem;}
+.ef-body{padding:3rem;}
+.ef-tag{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;background:rgba(201,168,76,.2);color:var(--gold);padding:.3rem .8rem;border-radius:100px;display:inline-block;margin-bottom:1rem;}
+.ef-body h2{font-family:'Cormorant Garamond',serif;font-size:2rem;color:white;margin-bottom:1rem;}
+.ef-body p{color:rgba(255,255,255,.6);line-height:1.8;font-weight:300;font-size:.92rem;margin-bottom:1.5rem;}
+.ef-meta{display:flex;gap:2rem;margin-bottom:1.5rem;}
+.ef-meta span{font-size:.78rem;color:rgba(255,255,255,.4);}
+.events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.ev-card{background:white;overflow:hidden;transition:transform .25s,box-shadow .25s;cursor:pointer;}
+.ev-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.08);}
+.ev-header{background:var(--navy);padding:2rem;display:flex;align-items:center;gap:1.5rem;}
+.ev-date-box{text-align:center;flex-shrink:0;}
+.ev-date-day{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--gold);line-height:1;}
+.ev-date-mo{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.ev-header-info h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:white;margin-bottom:.3rem;}
+.ev-header-tag{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;padding:.2rem .6rem;border-radius:100px;background:rgba(201,168,76,.2);color:var(--gold);}
+.ev-body{padding:1.75rem;}
+.ev-body p{font-size:.84rem;color:var(--muted);line-height:1.75;font-weight:300;}
+.ev-footer{padding:1rem 1.75rem;border-top:1px solid rgba(0,0,0,.06);display:flex;justify-content:space-between;align-items:center;}
+.ev-loc{font-size:.72rem;color:var(--muted);}
+.ev-rsvp{font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);cursor:pointer;}
+.past-events{padding:5rem 6rem;background:white;}
+.past-ev{display:flex;gap:2rem;padding:1.5rem 0;border-bottom:1px solid rgba(0,0,0,.06);align-items:center;cursor:pointer;transition:opacity .2s;}
+.past-ev:hover{opacity:.7;}
+.past-ev-date{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--muted);min-width:80px;text-align:center;line-height:1;}
+.past-ev-info h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--navy);}
+.past-ev-info p{font-size:.82rem;color:var(--muted);margin-top:.25rem;}
+/* RSVP Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:2000;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--navy);width:100%;max-width:480px;padding:3rem;position:relative;}
+.modal-close{position:absolute;top:1rem;right:1.5rem;background:none;border:none;color:rgba(255,255,255,.4);font-size:1.5rem;cursor:pointer;}
+.modal h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:white;margin-bottom:.5rem;}
+.modal p{font-size:.85rem;color:rgba(255,255,255,.5);margin-bottom:2rem;}
+.modal .form-group label{color:rgba(255,255,255,.5);}
+.modal .form-group input{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:white;}
+.modal .form-group input:focus{border-color:var(--gold);}
+@media(max-width:1024px){
+  .events-filter,.events-main,.past-events{padding:2rem;}
+  .event-featured{grid-template-columns:1fr;}.events-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<nav id="nav"></nav>
+<div id="mobile-nav" class="nav-mobile"></div>
+<div class="page-hero">
+  <div class="section-label center">What's On</div>
+  <h1>Events</h1>
+  <p>From intimate networking evenings to major launch events — every Connect Guernsey event is designed to create meaningful connections.</p>
+</div>
+<div class="mosaic-strip"><div class="ms-1"></div><div class="ms-2"></div><div class="ms-3"></div><div class="ms-4"></div><div class="ms-5"></div><div class="ms-6"></div><div class="ms-7"></div><div class="ms-8"></div><div class="ms-9"></div><div class="ms-10"></div></div>
+<div class="events-filter">
+  <span style="font-size:.7rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-right:.5rem">Filter:</span>
+  <button class="filter-btn active" onclick="filterEvents('all',this)">All Events</button>
+  <button class="filter-btn" onclick="filterEvents('open',this)">Open Events</button>
+  <button class="filter-btn" onclick="filterEvents('members_only',this)">Members Only</button>
+</div>
+<section class="events-main">
+  <div id="featuredEvent"></div>
+  <div class="events-grid" id="eventsGrid">
+    <!-- Fallback static events -->
+    <div class="ev-card" data-type="open">
+      <div class="ev-header"><div class="ev-date-box"><div class="ev-date-day">—</div><div class="ev-date-mo">May 2026</div></div><div class="ev-header-info"><h3>Connect Guernsey Launch</h3><span class="ev-header-tag">Open Event</span></div></div>
+      <div class="ev-body"><p>The official launch of Connect Guernsey — an open evening for professionals across the island. Meet the team, hear from a guest speaker, and be part of something new.</p></div>
+      <div class="ev-footer"><span class="ev-loc">📍 Guernsey — TBC</span><span class="ev-rsvp" onclick="openRSVP('launch-2026','Connect Guernsey Launch')">RSVP →</span></div>
+    </div>
+    <div class="ev-card" data-type="members_only">
+      <div class="ev-header"><div class="ev-date-box"><div class="ev-date-day">—</div><div class="ev-date-mo">Jul 2026</div></div><div class="ev-header-info"><h3>Summer Networking Evening</h3><span class="ev-header-tag">Members Only</span></div></div>
+      <div class="ev-body"><p>An informal summer evening for Connect Guernsey members — great conversation, new connections, and a chance to enjoy the island at its best.</p></div>
+      <div class="ev-footer"><span class="ev-loc">📍 Guernsey</span><span class="ev-rsvp">Members Only</span></div>
+    </div>
+    <div class="ev-card" data-type="members_only">
+      <div class="ev-header"><div class="ev-date-box"><div class="ev-date-day">—</div><div class="ev-date-mo">Sep 2026</div></div><div class="ev-header-info"><h3>Members Evening</h3><span class="ev-header-tag">Members Only</span></div></div>
+      <div class="ev-body"><p>Our autumn members evening — an intimate gathering focused on meaningful connection across our three pillars. Membership required.</p></div>
+      <div class="ev-footer"><span class="ev-loc">📍 Guernsey</span><span class="ev-rsvp">Members Only</span></div>
+    </div>
+  </div>
+</section>
+<section class="past-events">
+  <div class="section-label">Archive</div>
+  <h2 class="section-title" style="margin-bottom:2.5rem">Past Events</h2>
+  <div id="pastEvents"><p style="color:var(--muted);font-size:.88rem">Past events will appear here after our launch.</p></div>
+</section>
+<!-- RSVP Modal -->
+<div class="modal-overlay" id="rsvpModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeRSVP()">×</button>
+    <h3 id="rsvpTitle">RSVP</h3>
+    <p id="rsvpSubtitle">Register your place for this event.</p>
+    <div id="rsvpAlert"></div>
+    <form id="rsvpForm">
+      <input type="hidden" id="rsvpEventId">
+      <div class="form-row">
+        <div class="form-group"><label>First Name *</label><input type="text" id="rsvpFirst" required placeholder="First name"></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="rsvpLast" required placeholder="Last name"></div>
+      </div>
+      <div class="form-group"><label>Email Address *</label><input type="email" id="rsvpEmail" required placeholder="your@email.com"></div>
+      <button type="submit" class="btn btn-gold" style="width:100%;margin-top:.5rem" id="rsvpBtn">Confirm RSVP</button>
+    </form>
+  </div>
+</div>
+<footer></footer>
+<script src="/assets/js/api.js"></script>
+<script>
+let allEvents=[];
+function filterEvents(type,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.ev-card').forEach(c=>{
+    c.style.display=(type==='all'||c.dataset.type===type)?'block':'none';
+  });
+}
+function openRSVP(id,title){
+  document.getElementById('rsvpEventId').value=id;
+  document.getElementById('rsvpTitle').textContent='RSVP — '+title;
+  document.getElementById('rsvpModal').classList.add('open');
+}
+function closeRSVP(){document.getElementById('rsvpModal').classList.remove('open');}
+document.getElementById('rsvpForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('rsvpBtn');
+  btn.textContent='Submitting...';btn.disabled=true;
+  try{
+    await api.post('/api/events/rsvp',{
+      event_id:document.getElementById('rsvpEventId').value,
+      first_name:document.getElementById('rsvpFirst').value,
+      last_name:document.getElementById('rsvpLast').value,
+      email:document.getElementById('rsvpEmail').value
+    });
+    showAlert('rsvpAlert','✓ RSVP confirmed! Check your email for details.','success');
+    e.target.reset();setTimeout(closeRSVP,3000);
+  }catch(err){showAlert('rsvpAlert',err.message,'error');}
+  btn.textContent='Confirm RSVP';btn.disabled=false;
+});
+async function loadEvents(){
+  try{
+    const{events}=await api.get('/api/events/public');
+    if(!events||!events.length)return;
+    allEvents=events;
+    const upcoming=events.filter(e=>new Date(e.event_date)>=new Date());
+    const past=events.filter(e=>new Date(e.event_date)<new Date());
+    if(upcoming.length){
+      const first=upcoming[0];
+      const d=new Date(first.event_date);
+      document.getElementById('featuredEvent').innerHTML=`
+        <div class="event-featured reveal" style="margin-bottom:2rem">
+          <div class="ef-date"><div class="ef-day">${d.getDate()}</div><div class="ef-month">${d.toLocaleDateString('en-GB',{month:'long',year:'numeric'})}</div></div>
+          <div class="ef-body">
+            <span class="ef-tag">⭐ Next Event</span>
+            <h2>${first.title}</h2>
+            <div class="ef-meta"><span>📍 ${first.location}</span><span>🎟️ ${first.event_type==='members_only'?'Members Only':'Open to All'}</span>${first.capacity?`<span>👥 ${first.capacity} capacity</span>`:''}</div>
+            <p>${first.description}</p>
+            ${first.event_type!=='members_only'?`<button class="btn btn-gold" onclick="openRSVP('${first.id}','${first.title}')">Reserve Your Place →</button>`:`<span class="btn btn-ghost" style="cursor:default">Members Only Event</span>`}
+          </div>
+        </div>`;
+      document.getElementById('eventsGrid').innerHTML=upcoming.slice(1).map(e=>`
+        <div class="ev-card reveal" data-type="${e.event_type}">
+          <div class="ev-header">
+            <div class="ev-date-box"><div class="ev-date-day">${new Date(e.event_date).getDate()}</div><div class="ev-date-mo">${new Date(e.event_date).toLocaleDateString('en-GB',{month:'short',year:'numeric'})}</div></div>
+            <div class="ev-header-info"><h3>${e.title}</h3><span class="ev-header-tag">${e.event_type==='members_only'?'Members Only':'Open Event'}</span></div>
+          </div>
+          <div class="ev-body"><p>${(e.short_description||e.description).substring(0,150)}...</p></div>
+          <div class="ev-footer"><span class="ev-loc">📍 ${e.location}</span>${e.event_type!=='members_only'?`<span class="ev-rsvp" onclick="openRSVP('${e.id}','${e.title}')">RSVP →</span>`:'<span class="ev-rsvp" style="color:var(--muted)">Members Only</span>'}</div>
+        </div>`).join('');
+    }
+    if(past.length){
+      document.getElementById('pastEvents').innerHTML=past.reverse().map(e=>`
+        <div class="past-ev"><div class="past-ev-date">${new Date(e.event_date).toLocaleDateString('en-GB',{month:'short'})}<br><span style="font-size:.8rem">${new Date(e.event_date).getFullYear()}</span></div>
+        <div class="past-ev-info"><h4>${e.title}</h4><p>${e.location} · ${e.event_type==='members_only'?'Members Only':'Open Event'}</p></div></div>`).join('');
+    }
+    initReveal();
+  }catch(e){}
+}
+document.addEventListener('DOMContentLoaded',async()=>{buildNav('events');await loadContent();fillAll();loadEvents();});
+window.addEventListener('click',e=>{if(e.target.id==='rsvpModal')closeRSVP();});
+</script>
+</body>
+</html>
