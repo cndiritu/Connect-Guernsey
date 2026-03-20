@@ -3,7 +3,7 @@ from models.schemas import LoginRequest, TokenResponse, AdminCreate
 from core.auth import hash_password, verify_password, create_access_token, get_current_admin
 from core.database import get_supabase
 
-router = APIRouter(prefix="/api/auth", tags=["Auth"])
+router = APIRouter(tags=["Auth"])
 
 @router.post("/login")
 async def login(body: LoginRequest):
