@@ -6,6 +6,7 @@ class Settings:
     JWT_SECRET: str = os.getenv("JWT_SECRET", "changeme")
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_HOURS: int = 24
+    JWT_EXPIRE_MINUTES: int = 1440  # 24 hours in minutes
     ADMIN_EMAIL: str = os.getenv("ADMIN_EMAIL", "admin@connectguernsey.com")
     ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "changeme")
     RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
@@ -13,7 +14,6 @@ class Settings:
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "https://connectguernsey.com")
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "production")
 
-    # Lowercase aliases so all routers work
     @property
     def admin_email(self): return self.ADMIN_EMAIL
     @property
