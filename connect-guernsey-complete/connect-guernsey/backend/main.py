@@ -70,32 +70,29 @@ async def startup():
         logger.error(f"Startup error: {e}")
         return
 
-    # Seed admin using passlib (same as auth.py uses)
+    # Seed admin using core.auth (same hash function the login uses)
     try:
-        from passlib.context import CryptContext
-        pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
+        from core.auth import hash_password
         admin_email = os.getenv("ADMIN_EMAIL", "admin@connectguernsey.com")
-        admin_password = os.getenv("ADMIN_PASSWORD", "changeme")
+        admin_password = os.getenv("ADMIN_PASSWORD", "CGAdmin2026")
 
+        # Always update hash on startup to ensure it matches
+        hashed = hash_password(admin_password)
         existing = db.table("admins").select("id").eq("email", admin_email).execute()
         if not existing.data:
-            hashed = pwd_context.hash(admin_password)
             db.table("admins").insert({
                 "email": admin_email,
                 "password_hash": hashed,
                 "name": "Admin",
                 "is_active": True
             }).execute()
-            logger.info(f"Admin account created: {admin_email}")
+            logger.info(f"Admin created: {admin_email}")
         else:
-            # Always update the hash to ensure it's correct
-            hashed = pwd_context.hash(admin_password)
             db.table("admins").update({
                 "password_hash": hashed,
                 "is_active": True
             }).eq("email", admin_email).execute()
-            logger.info(f"Admin password hash refreshed: {admin_email}")
+            logger.info(f"Admin password refreshed: {admin_email}")
     except Exception as e:
         logger.warning(f"Could not seed admin: {e}")
 
