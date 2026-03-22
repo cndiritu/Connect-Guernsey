@@ -253,3 +253,15 @@ async def library(admin=Depends(get_current_admin)):
 async def delete_file(filename: str, admin=Depends(get_current_admin)):
     get_supabase().storage.from_("connect-guernsey").remove([f"uploads/{filename}"])
     return {"message": "Deleted"}
+
+# Combined router for easy import
+from fastapi import APIRouter
+router = APIRouter()
+router.include_router(team_router)
+router.include_router(gallery_router)
+router.include_router(partners_router)
+router.include_router(enquiries_router)
+router.include_router(content_router)
+router.include_router(settings_router)
+router.include_router(admins_router)
+router.include_router(media_router)
